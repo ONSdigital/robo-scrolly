@@ -4,5 +4,5 @@
 *.bak
 .svelte-kit/
 build/
-source-data/
-static/data/
+static/data/json/
+static/data/places.csv

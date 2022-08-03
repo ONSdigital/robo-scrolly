@@ -4,8 +4,30 @@ import { format } from "d3-format";
 import { render } from "rosaenlg";
 import { parse } from "node-html-parser";
 import parseColor from "parse-color";
-import MagicArray from "./source-data/magic-array.js";
-import { geo_types, cols, data_url, template_url } from "./source-data/config.js";
+import { geo_types, cols, data_url, template_url } from "./build-data.config.js";
+
+// MagicArray class simplifies sorting and filtering of arrays
+class MagicArray extends Array {
+	sortBy(key) {
+		return this[0][key] && typeof this[0][key] === "number" ?
+			new MagicArray(...this).sort((a, b) => b[key] - a[key]) :
+			this[0][key] && typeof this[0][key] === "string" ? 
+			new MagicArray(...this).sort((a, b) => a[key].localeCompare(b[key])) :
+			this;
+	}
+	filterBy(key, val) {
+		return !this[0][key] ? this :
+			this.filter(d => d[key] === val);
+	}
+	trim(int) {
+		return typeof int !== "number" ? this :
+			int >= 0 ? this.slice(0, Math.floor(int)) :
+			this.slice(Math.floor(int));
+	}
+	flip() {
+		return new MagicArray(...this).reverse();
+	}
+}
 
 // Load data CSV
 let data_raw = readFileSync(data_url, {encoding:'utf8', flag:'r'});
