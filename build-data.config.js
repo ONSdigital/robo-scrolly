@@ -1,6 +1,6 @@
 // Locations of data file and template (absolute path to a local or shared drive)
 export const data_url = "Z:/robo-editor/data/data.csv";
-export const template_url = "Z:/robo-editor/data/template.pug";
+export const template_url = "Z:/robo-editor/data/template.txt";
 
 // LA geography types to filter from CSV
 export const geo_types = ["E06","E07","E08","E09","W06"];
