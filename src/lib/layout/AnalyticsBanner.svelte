@@ -30,7 +30,6 @@
   }
 
   function extractDomainFromUrl(e) {
-    if (0 <= e.indexOf("localhost") || 0 <= e.indexOf("127.0.0.1")) return "localhost";
     var t = e.match(new RegExp("(.co.uk|.gov.uk)"));
     if (t) {
       return "." + e.replace(t[0], "").split(".").pop() + t;

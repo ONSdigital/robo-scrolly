@@ -11,21 +11,18 @@ export const analyticsProps = {
 // CORE CONFIG
 export const themes = {
   'light': {
-    'name': 'light',
     'text': '#222',
     'muted': '#777',
     'pale': '#f0f0f0',
     'background': '#fff'
   },
   'dark': {
-    'name': 'dark',
     'text': '#fff',
     'muted': '#bbb',
     'pale': '#333',
     'background': '#222'
   },
   'lightblue': {
-    'name': 'lightblue',
     'text': '#206095',
     'muted': '#707070',
     'pale': '#f0f0f0',

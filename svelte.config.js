@@ -12,9 +12,8 @@ const config = {
 			assets: 'build'
 		}),
 		prerender: {
-			default: true,
 			enabled: production,
-			entries: ['/'],
+			entries: ['/', '/embed/'],
 			onError: 'continue'
 		},
 		paths: {

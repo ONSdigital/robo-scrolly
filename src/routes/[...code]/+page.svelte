@@ -1,63 +1,30 @@
-<script context="module">
-	export const prerender = true;
-	
-	import bbox from "@turf/bbox";
-  	import { base } from "$app/paths";
-	import { getData, getTopo, getPlace, getBreaks, getColor } from "$lib/utils";
-	import { regions, colors } from "$lib/config";
-
-	export async function load({ params, fetch }) {
-		let geojson = await getTopo(`${base}/data/geo_lad2015.json`, 'LAD15merc', fetch);
-		let mapbounds = bbox(geojson);
-		let places = await getData(`${base}/data/places.csv`, fetch); // Array of data for all places
-		let lookup = {}; // Places data as a lookup
-		places.forEach(p => lookup[p.areacd] = p);
-
-		let selected = params.code.replace("/", ""); // GSS code for selected district
-		let data = await getPlace(`${base}/data/json/${lookup[selected] ? selected : 'default'}.json`, fetch);
-		let place = lookup[selected] ? lookup[selected] : null; // Data for selected area
-		if (!place) selected = null;
-		let region = place && place.regioncd ? place.regioncd : null; // Region GSS code for selected area
-		let ctry = place && place.ctrycd ? place.ctrycd : null; // Country GSS code for selected area
-		let siblings = region ? places.filter(p => p.regioncd == region).map(p => p.areacd) :
-			ctry ? places.filter(p => p.ctrycd == ctry).map(p => p.areacd) :
-			null; // Array of GSS codes for sibling areas (within same region/ctry)
-		
-		// Calculate colour breaks for map
-		const keys = ["long_term_illness_2011_pc", "limited_lot_2011_pc", "unpaid_care_20_plus_2011_pc"];
-		for (const key of keys) {
-			let breaks = getBreaks(places.map(d => d[key]));
-			places.forEach(d => d[key + "_color"] = getColor(d[key], breaks, colors.seq));
-		}
-
-		return {
-				props: {geojson, mapbounds, places, lookup, selected, data, place, region, ctry, siblings}
-		};
-	}
-</script>
-
 <script>
-	export let geojson, mapbounds, places, lookup, selected, data, place, region, ctry, siblings;
+  import { base } from "$app/paths";
+
+  export let data;
+  let { geojson, mapbounds, places, lookup, selected, content, place, region, ctry, siblings } = data;
+	$: ({ geojson, mapbounds, places, lookup, selected, content, place, region, ctry, siblings } = data);
 
 	// CORE IMPORTS
 	import { getContext, onMount } from "svelte";
 	import { getMotion } from "$lib/utils";
+  import bbox from "@turf/bbox";
+
 	import Header from "$lib/layout/Header.svelte";
 	import Section from "$lib/layout/Section.svelte";
 	import Media from "$lib/layout/Media.svelte";
 	import Scroller from "$lib/layout/Scroller.svelte";
 	import Filler from "$lib/layout/Filler.svelte";
-	import Divider from "$lib/layout/Divider.svelte";
+	// import Divider from "$lib/layout/Divider.svelte";
 	import Toggle from "$lib/ui/Toggle.svelte";
 	import Arrow from "$lib/ui/Arrow.svelte";
-	import Em from "$lib/ui/Em.svelte";
 	import Icon from "$lib/ui/Icon.svelte";
 	import Select from "$lib/ui/Select.svelte";
 
 	// DEMO-SPECIFIC IMPORTS
 	import { goto } from "$app/navigation";
 	import { setColors } from "$lib/utils";
-	import { units, themes } from "$lib/config";
+	import { units, themes, regions } from "$lib/config";
 	import { ScatterChart, LineChart, BarChart } from "@onsvisual/svelte-charts";
 	import { Map, MapSource, MapLayer, MapTooltip } from "@onsvisual/svelte-maps";
 
@@ -128,6 +95,7 @@
 	}
 
 	// Actions for Scroller components
+  // Note that they are nested as {scrollerId: {sectionId: FUNCTION}}
 	const actions = {
 		scatter: {
 			scatter_a: (id) => {
@@ -177,13 +145,14 @@
 		}
 	};
 
-	// Code to run Scroller actions when "change" event is triggered
+	// Code to run Scroller actions
+  // Triggered by a "change" event on any Scroller component
 	function runAction(e) {
 		let id = e.detail.id;
-		let section = e.detail.section;
-		if (id && section && actions[id][section]) {
-			console.log("running action " + section);
-			actions[id][section](id);
+		let sectionId = e.detail.sectionId;
+		if (id && sectionId && actions[id][sectionId]) {
+			console.log("running action " + sectionId);
+			actions[id][sectionId](id);
 		}
 	}
 </script>
@@ -199,13 +168,13 @@
 	<meta name="description" content="This is a description of the page." />
 </svelte:head>
 
-{#if Array.isArray(data.notes)}
-{#each data.notes as note}
+{#if Array.isArray(content.notes)}
+{#each content.notes as note}
 {@html `<!-- ${note} -->`}
 {/each}
 {/if}
 
-{#each data.sections as section}
+{#each content.sections as section}
 {#if section.type == "Header"}
 <Header theme="dark" bgcolor="#206095" bgfixed={true} center={false} short={true}>
 	{@html section.content}

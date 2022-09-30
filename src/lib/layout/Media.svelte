@@ -9,29 +9,33 @@
 	export let height = 200;
 	export let gap = 12;
 
+  let colors = theme ? themes[theme] : {};
 	let gridClass = grid ? ` grid-${grid}` : '';
-	
 	let rowHeight = !Number.isNaN(height) ? height + "px" : height;
-
 	let gridGap = !Number.isNaN(gap) ? gap + "px" : gap;
 </script>
 
-<figure style="color: {themes[theme]['text']}; background-color: {themes[theme]['background']};">
+<figure style:--text={colors.text} style:--background={colors.background}>
 	<div class="col-{col}">
-		<div class="grid{gridClass}" style="grid-gap: {gridGap}; min-height: {rowHeight}">
+		<div class="grid{gridClass}" style:grid-gap={gridGap} style:min-height={rowHeight}>
 			<slot></slot>
 		</div>
   </div>
 </figure>
+
 {#if caption}
-	<caption style="color: {themes[theme]['text']}; background-color: {themes[theme]['background']};">
-		<div class="col-medium">
-			<div class="caption">{@html caption}</div>
-		</div>
-	</caption>
+<caption style:--text={colors.text} style:--background={colors.background}>
+  <div class="col-medium">
+    <div class="caption">{@html caption}</div>
+  </div>
+</caption>
 {/if}
 
 <style>
+  figure, caption {
+    color: var(--text, #222);
+    background-color: var(--background, #fff);
+  }
 	.grid-ms {
 		display: grid;
 		display: -ms-grid;

@@ -9,20 +9,25 @@
   export let center = true;
   export let short = false;
 
-  let style = '';
-
-  if (bgimage) {
-    style += `background-image: url(${bgimage});`;
-  } else {
-    style += 'background-image: none;';
-  }
-
-  if (bgfixed) {
-    style += ' background-attachment: fixed;';
-  }
+  let colors = theme ? themes[theme] : {};
 </script>
 
+<header
+  style:--text={colors.text} style:--background={bgcolor ? bgcolor : colors.background}
+  style:background-image={bgimage ? `url(${bgimage})` : null} style:background-attachment={bgfixed ? 'fixed' : null}
+  class:short>
+	<div class="v-padded col-wide middle" style="position: relative" class:short class:height-full={!short}>
+		<div class:center>
+			<slot></slot>
+    </div>
+	</div>
+</header>
+
 <style>
+  header {
+    color: var(--text, #222);
+    background-color: var(--background, #fff);
+  }
   .short {
     min-height: 85vh;
   }
@@ -31,11 +36,3 @@
     padding: 40px 0;
   }
 </style>
-
-<header style="color: {themes[theme]['text']}; background-color: {bgcolor ? bgcolor : themes[theme]['background']}; {style}" class:short>
-	<div class="v-padded col-wide middle" style="position: relative" class:short class:height-full={!short}>
-		<div class:center>
-			<slot></slot>
-    </div>
-	</div>
-</header>

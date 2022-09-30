@@ -4,9 +4,11 @@
 
 	export let theme = getContext('theme');
 	export let id = null;
+
+  let colors = theme ? themes[theme] : {};
 </script>
 
-<section {id} style="color: {themes[theme]['text']}; background-color: {themes[theme]['background']}">
+<section {id} style:--text={colors.text} style:--background={colors.background}>
 	<div class="col-medium">
 		<slot></slot>
 	</div>
@@ -15,5 +17,7 @@
 <style>
 	section {
 		margin-bottom: 40px;
+    color: var(--text, #222);
+    background-color: var(--background, #fff);
 	}
 </style>

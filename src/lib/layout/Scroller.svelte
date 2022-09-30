@@ -84,7 +84,7 @@
 	export let visible = false;
 	export let splitscreen = false; // Add class to allow for split screen option
 	export let id = null;
-	export let section = null;
+	export let sectionId = null;
 
 	let outer;
 	let bgContainer; // IE patch. Container binding to update inline style
@@ -181,8 +181,8 @@
             if (bottom >= threshold_px) {
 				if (index != i) { // Patch to only assign index when it changes value
 					index = i;
-					section = _section.dataset.id ? _section.dataset.id : null;
-					dispatch('change', {id, index, section});
+					sectionId = _section.dataset.id ? _section.dataset.id : null;
+					dispatch('change', {id, index, sectionId});
 				}
 				break;
 			}

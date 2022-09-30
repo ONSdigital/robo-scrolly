@@ -4,7 +4,7 @@
   "version": "0.1.1",
   "scripts": {
     "dev": "vite dev",
-    "build": "vite build && touch build/.nojekyll",
+    "build": "vite build",
     "package": "vite package",
     "preview": "vite preview",
     "deploy": "gh-pages -d build -t true",

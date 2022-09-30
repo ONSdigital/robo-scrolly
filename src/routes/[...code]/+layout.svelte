@@ -1,13 +1,12 @@
 <script>
-  import "../app.css";
-  import { base } from "$app/paths";
+  import "../../app.css";
   import { page } from '$app/stores';
 	import { setContext } from "svelte";
   import { analyticsId, analyticsProps } from "$lib/config";
-	//import Warning from "$lib/ui/Warning.svelte";
   import AnalyticsBanner from "$lib/layout/AnalyticsBanner.svelte";
 	import ONSHeader from "$lib/layout/ONSHeader.svelte";
 	import ONSFooter from "$lib/layout/ONSFooter.svelte";
+	//import Warning from "$lib/ui/Warning.svelte";
 
   // STYLE CONFIG
   // Set theme globally (options are 'light' or 'dark')

@@ -4,24 +4,27 @@
 
   export let theme = getContext('theme');
   export let hr = true;
+
+  let colors = theme ? themes[theme] : {};
 </script>
 
-<section style="color: {themes[theme]['text']}; background-color: {themes[theme]['background']};">
+<section style:--text={colors.text} style:--background={colors.background} style:--muted={colors.muted}>
 	<div class="col-medium">
-    {#if hr}
-    <hr style="color: {themes[theme]['muted']}"/>
-    {:else}
-    <hr style="color: {themes[theme]['muted']}; border: none;"/>
-    {/if}
+    <hr style:border={hr ? null : 'none'}/>
 	</div>
 </section>
 
 <style>
+  section {
+    color: var(--text, #222);
+    background-color: var(--background, #fff);
+  }
   hr {
     width: 75px;
     border: none;
     border-top: 2px solid;
     margin: 40px auto -10px auto;
+    color: var(--muted, #777);
   }
 </style>
 
