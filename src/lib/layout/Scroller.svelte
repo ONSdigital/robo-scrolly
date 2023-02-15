@@ -1,8 +1,7 @@
 <script context="module">
-	// Based on svelte-scroller by Rich Harris
+  // Based on svelte-scroller by Rich Harris
 	// https://github.com/sveltejs/svelte-scroller
-	// Patched to transpile to IE 11 and allow for split-screen view option
-
+  // Extended to allow for split-screen mode, section IDs and on:change event
 	const handlers = [];
 	let manager;
 
@@ -65,8 +64,7 @@
 </script>
 
 <script>
-	import { onMount } from 'svelte';
-	import { createEventDispatcher } from 'svelte';
+	import { onMount, createEventDispatcher } from 'svelte';
 	const dispatch = createEventDispatcher();
 
 	// config
@@ -75,6 +73,7 @@
 	export let threshold = 0.5;
 	export let query = 'section';
 	export let parallax = false;
+  export let splitscreen = false; // Add class to allow for split-screen styling option
 
 	// bindings
 	export let index = 0;
@@ -82,19 +81,17 @@
 	export let offset = 0;
 	export let progress = 0;
 	export let visible = false;
-	export let splitscreen = false; // Add class to allow for split screen option
-	export let id = null;
-	export let sectionId = null;
+  export let id = null; // Unique ID for scroller
+	export let sectionId = null; // ID for current section within scroller
 
 	let outer;
-	let bgContainer; // IE patch. Container binding to update inline style
 	let foreground;
 	let background;
 	let left;
 	let sections;
 	let wh = 0;
 	let fixed;
-	let offset_top;
+	let offset_top = 0;
 	let width = 1;
 	let height;
 	let inverted;
@@ -104,6 +101,15 @@
 	$: threshold_px = Math.round(threshold * wh);
 
 	$: (top, bottom, threshold, parallax, update());
+
+	$: style = `
+		position: ${fixed ? 'fixed' : 'absolute'};
+		top: 0;
+		transform: translate(0, ${offset_top}px);
+		z-index: ${inverted ? 3 : 1};
+	`;
+
+	$: widthStyle = fixed ? `width:${width}px;` : '';
 
 	onMount(() => {
 		sections = foreground.querySelectorAll(query);
@@ -117,21 +123,13 @@
 		return () => manager.remove(scroller);
 	});
 
-	// IE patch. BG container style (fixed/unfixed) set via function
-	function setFixed() {
-		if (bgContainer) {
-			let style = `position: ${fixed ? 'fixed' : 'absolute'}; top: 0; transform: translate(0, ${offset_top}px); width: ${width}px; z-index: ${inverted ? 3 : 1};`;
-			bgContainer.style.cssText = style;
-		}
-	}
-
 	function update() {
 		if (!foreground) return;
 
 		// re-measure outer container
 		const bcr = outer.getBoundingClientRect();
 		left = bcr.left;
-		width = bcr.right - bcr.left;
+		width = bcr.right - left;
 
 		// determine fix state
 		const fg = foreground.getBoundingClientRect();
@@ -147,43 +145,33 @@
 
 		if (progress <= 0) {
 			offset_top = 0;
-      if (fixed) {
-        fixed = false;
-        setFixed();
-      } // Non-IE specific patch to avoid setting style repeatedly
+			fixed = false;
 		} else if (progress >= 1) {
 			offset_top = parallax
 				? (foreground_height - background_height)
 				: (foreground_height - available_space);
-      if (fixed) {
-        fixed = false;
-        setFixed();
-      }
+			fixed = false;
 		} else {
 			offset_top = parallax ?
 				Math.round(top_px - progress * (background_height - available_space)) :
 				top_px;
-      if (!fixed) {
-        fixed = true;
-        setFixed();
-      }
+			fixed = true;
 		}
 
 		for (let i = 0; i < sections.length; i++) {
-            const _section = sections[i];
-			const { top } = _section.getBoundingClientRect();
+			const section = sections[i];
+			const { top } = section.getBoundingClientRect();
 
 			const next = sections[i + 1];
 			const bottom = next ? next.getBoundingClientRect().top : fg.bottom;
 
 			offset = (threshold_px - top) / (bottom - top);
-
-            if (bottom >= threshold_px) {
-				if (index != i) { // Patch to only assign index when it changes value
-					index = i;
-					sectionId = _section.dataset.id ? _section.dataset.id : null;
-					dispatch('change', {id, index, sectionId});
-				}
+			if (bottom >= threshold_px) {
+        if (index !== i) {
+          index = i;
+          sectionId = section.dataset.id ? section.dataset.id : null;
+          dispatch('change', {id, index, sectionId});
+        }
 				break;
 			}
 		}
@@ -193,7 +181,7 @@
 <svelte:window bind:innerHeight={wh}/>
 
 <svelte-scroller-outer {id} bind:this={outer} class:splitscreen>
-	<svelte-scroller-background-container class='background-container' bind:this={bgContainer}>
+	<svelte-scroller-background-container class='background-container' style="{style}{widthStyle}">
 		<svelte-scroller-background bind:this={background}>
 			<slot name="background"></slot>
 		</svelte-scroller-background>
@@ -208,7 +196,6 @@
 	svelte-scroller-outer {
 		display: block;
 		position: relative;
-		max-width: 100%;
 	}
 
 	svelte-scroller-background {
