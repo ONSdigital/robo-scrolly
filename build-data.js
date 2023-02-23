@@ -4,7 +4,7 @@ import { format } from "d3-format";
 import { render } from "rosaenlg";
 import { parse } from "node-html-parser";
 import parseColor from "parse-color";
-import { geo_types, cols, data_url, template_url } from "./build-data.config.js";
+import { geo_types, cols, source_dir, data_file, template_file, files_to_copy } from "./build-data.config.js";
 
 // MagicArray class simplifies sorting and filtering of arrays
 class MagicArray extends Array {
@@ -30,7 +30,7 @@ class MagicArray extends Array {
 }
 
 // Load data CSV
-let data_raw = readFileSync(data_url, {encoding:'utf8', flag:'r'});
+let data_raw = readFileSync(source_dir + data_file, {encoding:'utf8', flag:'r'});
 let data = csvParse(data_raw, autoType);
 
 // Create the output directories (if they don't exist)
@@ -40,7 +40,7 @@ if (!existsSync(dir)){
 }
 
 // Load PUG file
-let template = readFileSync(template_url, {encoding:'utf8', flag:'r'});
+let template = readFileSync(source_dir + template_file, {encoding:'utf8', flag:'r'});
 
 // Process data file into array of LAs and keyed lookup of all geographies
 let places = new MagicArray(...data.filter(d => geo_types.includes(d.areacd.slice(0,3))));

@@ -158,11 +158,13 @@
 </script>
 
 <svelte:head>
-	<title>{place ? `Localised article for ${place.areacd}` : 'Localised article example'}</title><link rel="icon" href="{base}/favicon.ico" />
+	<title>{place ? `Localised article for ${place.areacd}` : 'Localised article example'}</title>
+  <link rel="icon" href="https://www.ons.gov.uk/favicon.ico" />
+  <link rel="canonical" href="https://www.ons.gov.uk{base}{selected ? '/' + selected : ''}">
 	<meta property="og:type" content="website" />
-	<meta property="og:url" content="{base}{selected ? '/' + selected : ''}" />
+	<meta property="og:url" content="https://www.ons.gov.uk{base}{selected ? '/' + selected : ''}" />
 	<meta property="og:title" content="{place ? `Localised article for ${place.areacd}` : 'Localised article example'}" />
-	<meta property="og:image" content="{base}/img/og.png" />
+	<meta property="og:image" content="https://www.ons.gov.uk{base}/img/og.png" />
 	<meta property="og:image:type" content="image/png" />
 	<meta property="og:description" content="This is a description of the page." />
 	<meta name="description" content="This is a description of the page." />
