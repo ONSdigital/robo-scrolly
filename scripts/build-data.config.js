@@ -1,5 +1,5 @@
 // Locations of data file and template (absolute path to a local or shared drive)
-export const source_dir = "Z:/robo-editor/data/"
+export const source_dir = "Z:/tools/robo-editor/data/"
 export const data_file = "data.csv";
 export const template_file = "template.pug";
 
