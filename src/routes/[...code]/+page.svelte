@@ -41,7 +41,7 @@
 
 	// DEMO-SPECIFIC CONFIG
 	// Constants
-	const mapstyle = "https://bothness.github.io/ons-basemaps/data/style-omt.json";
+	const mapstyle = `${base}/data/mapstyle.json`;
 
 	// Element bindings
 	let map = {map1: null, map2: null};
@@ -242,16 +242,17 @@
 								'rgba(255, 255, 255, 0)'
 							],
 							'fill-opacity': 0.7
-						}}/>
+						}}
+            order="place_other"/>
 					<MapLayer
-					id="lad-line" type="line"
-					paint={{
-						'line-color': ['case',
-							['==', ['feature-state', 'highlighted'], true], 'black',
-							'rgba(255,255,255,0)'
-						],
-						'line-width': 2
-					}}/>
+            id="lad-line" type="line"
+            paint={{
+              'line-color': ['case',
+                ['==', ['feature-state', 'highlighted'], true], 'black',
+                'rgba(255,255,255,0)'
+              ],
+              'line-width': 2
+            }}/>
 				</MapSource>
 			</Map>
 		</div>
