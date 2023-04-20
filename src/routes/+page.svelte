@@ -1,5 +1,5 @@
 <script>
-  import "../../app.css";
+  import "../app.css";
 	import { onMount, setContext } from "svelte";
 	import { base } from "$app/paths";
 	import { regions } from "$lib/config";
