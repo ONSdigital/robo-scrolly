@@ -1,0 +1,20 @@
+if !place
+  section#header.Header
+    h2 How the population has changed in your area
+    p Select an area to see how the population has changed
+
+else
+  section#header.Header
+    h2 How the population has changed #{place.getName("in")}
+    p Select another area to see how the population has changed
+
+  section.Filler
+    p.big-text In 2020, the population of #{place.getName("the")} was #{place["2020"].format()}, #{moreLess(place["2020"] - place["2019"], ["an increase", "a decrease", "no change"])} compared with 2019.
+
+  section.Section
+    h3 Population density #{place.getName("in")}
+    p In 2020, the population density #{place.getName("in")} was #{place["density"].format()} people per hectare, which was #{moreLess(place["density"] - lookup["K02000001"]["density"], ["more than", "less than", "the same as"])} the United Kingdom as a whole.
+
+  section.Section
+    h3 Median age #{place.getName("in")}
+    p In 2020, the median age #{place.getName("in")} was #{place["age_med"].format(".0f")} years, which was #{moreLess(Math.round(place["age_med"]) - Math.round(lookup["K02000001"]["age_med"]), ["older than", "younger than", "the same as"])} the United Kingdom as a whole.
