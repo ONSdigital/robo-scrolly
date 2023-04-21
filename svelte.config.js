@@ -13,11 +13,11 @@ const config = {
 		}),
 		prerender: {
 			enabled: production,
-			entries: ['/', '/embed/'],
+			entries: ['/'],
 			onError: 'continue'
 		},
 		paths: {
-			base: production ? '/robo-scrolly' : ''
+			base: production ? '/robo-embed' : ''
 		},
 		trailingSlash: 'always'
 	}
