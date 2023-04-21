@@ -28,14 +28,14 @@
 	<script src="https://cdn.ons.gov.uk/vendor/pym/1.3.2/pym.min.js"></script>
 </svelte:head>
 
-<Section>
+<!-- <Section>
 	<div class="dropdown-container">
 		<label for="select">Select a local authority</label>
     <Select id="select" idKey="areacd" labelKey="areanm" items={data.places} on:select={doSelect} placeholder="Select a local authority..."/>
 	</div>
-</Section>
+</Section> -->
 
-<Media col="wide" grid="narrow">
+<!-- <Media col="wide" grid="narrow">
 	{#each regions as region}
 	<div class="text-small">
 		<strong>{region.nm}</strong><br/>
@@ -44,7 +44,7 @@
 		{/each}
 	</div>
 	{/each}
-</Media>
+</Media> -->
 
 <style>
 	.dropdown-container {

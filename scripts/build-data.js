@@ -26,7 +26,7 @@ data.forEach(d => lookup[d.areacd] = d);
 // Cycle through LAs (and null for "no area selected")
 [...places, null].forEach(place => {
     // Render the PUG template for selected place
-    const data = renderJSON(template, place, places, lookup, rosae, parse);
+    const data = renderJSON(template, place, places, lookup, rosae);
 
     // Set the save path (default.json is when no area is selected)
     const path = `./static/data/json/${place ? place.areacd : "default"}.json`;
