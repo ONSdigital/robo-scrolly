@@ -1,6 +1,6 @@
 {
-  "name": "@onsvisual/robo-scrolly",
-  "homepage": "http://onsvisual.github.io/robo-scrolly",
+  "name": "@onsvisual/robo-embed",
+  "homepage": "http://onsvisual.github.io/robo-embed",
   "version": "0.2.0",
   "scripts": {
     "dev": "vite dev",
@@ -15,7 +15,7 @@
   "author": "Ahmad Barclay",
   "license": "MIT",
   "devDependencies": {
-    "@onsvisual/robo-utils": "^0.1.37",
+    "@onsvisual/robo-utils": "^0.2.3",
     "@onsvisual/svelte-charts": "^0.2.11",
     "@sveltejs/adapter-static": "1.0.0-next.43",
     "@sveltejs/kit": "^1.0.0-next.505",

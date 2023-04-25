@@ -1,38 +1,33 @@
 <script>
-  import { themes } from '$lib/config';
-	import { getContext } from 'svelte';
-
-	export let theme = getContext('theme');
-  export let bgimage = null;
-  export let bgcolor = null;
-  export let bgfixed = false;
-  export let center = true;
-  export let short = false;
-
-  let colors = theme ? themes[theme] : {};
+  export let section = {};
 </script>
 
-<header
-  style:--text={colors.text} style:--background={bgcolor ? bgcolor : colors.background}
-  style:background-image={bgimage ? `url(${bgimage})` : null} style:background-attachment={bgfixed ? 'fixed' : null}
-  class:short>
-	<div class="v-padded col-wide middle" style="position: relative" class:short class:height-full={!short}>
-		<div class:center>
-			<slot></slot>
-    </div>
-	</div>
-</header>
+
+<div id={section.id} class="section__content--markdown section__content--markdown--neutral-article">
+	<header>
+    <slot/>
+  </header>
+</div>
 
 <style>
-  header {
-    color: var(--text, #222);
-    background-color: var(--background, #fff);
+  .section__content--markdown {
+    font-size: 18px;
+    margin: 0;
   }
-  .short {
-    min-height: 85vh;
+  .section__content--markdown > header {
+    color: #206095;
+    background-color: #E8EFF4;
+    padding: 36px 24px;
+    margin-bottom: 30px;
   }
-  .v-padded {
-    box-sizing: border-box;
-    padding: 40px 0;
+  :global(.section__content--markdown > header > h2) {
+    font-size: 1.4em;
+    margin: 0;
+    padding: 0;
+  }
+  :global(.section__content--markdown > header > label) {
+    display: block;
+    font-size: 1em;
+    margin: 12px 0 20px;
   }
 </style>

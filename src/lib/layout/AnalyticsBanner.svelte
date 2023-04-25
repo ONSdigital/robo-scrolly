@@ -1,11 +1,15 @@
+<script context="module">
+  export function analyticsEvent(props) {
+    if (window.dataLayer) window.dataLayer.push(props);
+  }
+</script>
 <script>
   import { onMount } from "svelte"
+  import { page } from "$app/stores";
 
   export let analyticsId; // Required. Google analytics/tag manager ID
   export let analyticsProps = {}; // Optional props to describe the content
   export let usageCookies = false; // True if usage cookies are allowed (to be read from parent component)
-  export let gtag = () => null; // Analytics events will be null unless analytics is enabled
-  export let page = null; // Pass Svelte Kit's $page to track navigation in multi-page apps
 
   let live; // Don't run analytics unless page is live on ONS site (re-set in the onMount function)
 
@@ -15,7 +19,7 @@
   let location = null; // For keeping track of navigation multi-page apps
 
   function hasCookiesPreferencesSet() {
-    return -1 < document.cookie.indexOf("cookies_preferences_set=true")
+      return -1 < document.cookie.indexOf("cookies_preferences_set=true")
   }
 
   // Check if usage cookies are allowed (for Google Analytics + Hotjar)
@@ -29,20 +33,10 @@
     return false;
   }
 
-  function extractDomainFromUrl(e) {
-    var t = e.match(new RegExp("(.co.uk|.gov.uk)"));
-    if (t) {
-      return "." + e.replace(t[0], "").split(".").pop() + t;
-    } else {
-      return e;
-    }
-  }
-
   // Set site cookie with 'all' or 'essential' cookies
   function setCookie(option) {
     let oneYearInSeconds = 60 * 60 * 24 * 365;
-    let url = window.location.hostname;
-    let cookiesDomain = extractDomainFromUrl(url);
+    let cookiesDomain = window.location.hostname;
     let cookiesPreference = !0;
     let encodedCookiesPolicy = `%7B%22essential%22%3Atrue%2C%22usage%22%3A${option == 'all' ? 'true' : 'false'}%7D`;
     let cookiesPath = "/";
@@ -53,53 +47,36 @@
     message = option == "all" ? "all" : "only essential";
     if (option == "all") usageCookies = true;
     showConfirm = true;
+
+    if (option == "all") initAnalytics();
   }
 
-  // Initialise analytics 'dataLayer' and 'gtag' push function
+  // Initialise analytics and 'window.dataLayer' (which can be used throughout the app)
   function initAnalytics() {
     console.log('initialising analytics');
     window.dataLayer = [{
-      "analyticsOptOut": false,
-      "gtm.whitelist": ["google","hjtc","lcl"],
-      "gtm.blacklist": ["customScripts","sp","adm","awct","k","d","j"],
-      ...analyticsProps
+    "analyticsOptOut": false,
+    "gtm.whitelist": ["google","hjtc","lcl"],
+    "gtm.blacklist": ["customScripts","sp","adm","awct","k","d","j"],
+    ...analyticsProps
     }];
-    if (page) location =  $page.url.hostname + $page.url.pathname + $page.url.searchParams;
-    gtag = function gtag() {
-      window.dataLayer.push(arguments);
-    };
-    window.gtag = gtag;
-  	gtag("js", new Date());
-    gtag("config", analyticsId);
+    if (page) location =  $page.url.href;
 
+    (function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
+      new Date().getTime(),event:'gtm.js'});var f=d.head,
+      j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
+      'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.appendChild(j);
+    })(window,document,'script','dataLayer',analyticsId);
   };
 
-  // This code is only relevant for multi-page Svelte Kit apps. It sends an analytics event when the URL changes
-  $: if (page && gtag() !== null) {
-    let newlocation = $page.url.hostname + $page.url.pathname + $page.url.searchParams;
-    if (newlocation !== location) {
-      location = newlocation;
-      gtag('config', analyticsId, {
-        page_path : $page.url.pathname,
-        page_location: location
-      });
-      console.log('logged nav to ' + location);
-    }
-  }
-
   onMount(() => {
-    // live = true;
-    live = window.location.hostname == "www.ons.gov.uk" || window.location.hostname == "cy.ons.gov.uk";
+    live = true;
+    //live = window.location.hostname == "www.ons.gov.uk" || window.location.hostname == "cy.ons.gov.uk";
     showBanner = !hasCookiesPreferencesSet();
     usageCookies = getUsageCookieValue();
+    if (usageCookies && live) initAnalytics();
   });
 </script>
-
-<svelte:head>
-  {#if live && usageCookies}
-  <script async src="https://www.googletagmanager.com/gtag/js?id={analyticsId}" on:load={initAnalytics}></script>
-  {/if}
-</svelte:head>
 
 {#if showBanner}
 <section>
@@ -116,12 +93,11 @@
           </h1>
           <p class="cookies-banner__body">
             We would like to
-            <a href="/cookies">use cookies to collect information</a>
-            about how you use <strong>ons.gov.uk</strong>.
+            use cookies to collect anonymous information
+            about how you use this prototype.
           </p>
           <p class="cookies-banner__body">
-            We use this information to make the website work as well as possible
-            and improve our services.
+            We use this information to improve our services.
           </p>
         </div>
         <div class="cookies-banner__buttons">
@@ -130,24 +106,17 @@
               class="btn btn--full-width btn--primary btn--focus margin-right--2 font-weight-700 font-size--17 text-wrap"
               data-gtm-accept-cookies="true" type="submit"
               on:click|preventDefault={() => setCookie('all')}>
-              Accept all cookies
+              Accept cookies
             </button>
           </div>
-          <div class="cookies-banner__button">
-            <a role="button" href="/cookies" class="btn btn--full-width btn--primary btn--focus margin-right--2 font-weight-700 font-size--17 text-wrap">
-              Set cookie preferences
-            </a>
-          </div>
-          <!--
           <div class="cookies-banner__button">
             <button
               class="btn btn--full-width btn--secondary btn--focus font-weight-700 font-size--17 text-wrap"
               data-gtm-accept-cookies="true"
-              on:click|preventDefault={() => setCookie('essential')}>
-              Essential cookies only
+              on:click|preventDefault={() => setCookie('reject')}>
+              Reject cookies
               </button>
           </div>
-          -->
         </div>
       </div>
     </div>
@@ -177,19 +146,25 @@
 {/if}
 
 <style>
-  section {
-    background-color:#e5e5e5;
-  }
-  #global-cookie-message {
-    width: 100%;
-    max-width:980px;
-    margin:0 24px;
-  }
   .wrapper{
-    box-sizing: border-box;
     width:100%;
+    margin:0 auto;
+    padding:0 16px;
+  }
+  @media(min-width:768px){
+    .wrapper{
+        width:752px;
+        padding:0;
+    }
+  }
+  @media(min-width:992px){
+    .wrapper{
+        width:944px;
+        padding:0;
+    }
   }
   .cookies-banner{
+    background-color:#e5e5e5;
     padding:20px 0;
     box-sizing:border-box;
   }
@@ -290,15 +265,13 @@
     cursor:pointer;
   }
   .btn{
-    box-sizing: border-box;
     font-family:open sans,Helvetica,Arial,sans-serif;
     font-weight:400;
     font-size:14px;
     display:inline-block;
     width:auto;
     cursor:pointer;
-    padding:6px 16px 10px;
-    margin:0;
+    padding:6px 16px;
     border:0;
     text-align:center;
     -webkit-appearance:none;

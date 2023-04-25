@@ -2,8 +2,7 @@ import { readFileSync, writeFileSync, existsSync, mkdirSync } from "fs";
 import { csvParse } from "d3-dsv";
 import { MagicArray, renderJSON, autoType } from "@onsvisual/robo-utils";
 import rosae from "rosaenlg";
-import { parse } from "node-html-parser";
-import { geo_types, cols, source_dir, data_file, template_file, files_to_copy } from "./build-data.config.js";
+import { filter, cols, source_dir, data_file, template_file, files_to_copy } from "./build-data.config.js";
 
 // Load data CSV
 let data_raw = readFileSync(source_dir + data_file, {encoding:'utf8', flag:'r'});
@@ -19,7 +18,7 @@ if (!existsSync(dir)){
 let template = readFileSync(source_dir + template_file, {encoding:'utf8', flag:'r'});
 
 // Process data file into array of LAs and keyed lookup of all geographies
-let places = data.filter(d => geo_types.includes(d.areacd.slice(0,3)));
+let places = Array.isArray(filter) && filter.length > 0 ? data.filter(d => filter.includes(d.areacd.slice(0,3))) : data;
 let lookup = {};
 data.forEach(d => lookup[d.areacd] = d);
 
@@ -36,7 +35,7 @@ data.forEach(d => lookup[d.areacd] = d);
     console.log(`Wrote ${path}`);
 });
 
-// Generate filtered CSV (only including cols and geo_types defined in config.js file)
+// Generate filtered CSV (only including cols and filter defined in config.js file)
 let csv_str = cols.join(",") + "\n";
 let rows = []
 places.forEach(place => rows.push(cols.map(col => {
