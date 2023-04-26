@@ -12,14 +12,11 @@ const config = {
 			assets: 'build'
 		}),
 		prerender: {
-			enabled: production,
-			entries: ['/'],
-			onError: 'continue'
+			handleHttpError: 'warn'
 		},
 		paths: {
 			base: production ? '/robo-embed' : ''
-		},
-		trailingSlash: 'always'
+		}
 	}
 };
 
