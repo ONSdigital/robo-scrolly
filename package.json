@@ -15,7 +15,7 @@
   "author": "Ahmad Barclay",
   "license": "MIT",
   "devDependencies": {
-    "@onsvisual/robo-utils": "^0.2.3",
+    "@onsvisual/robo-utils": "^0.2.4",
     "@onsvisual/svelte-charts": "^0.2.11",
     "@sveltejs/adapter-static": "1.0.0-next.43",
     "@sveltejs/kit": "^1.0.0-next.505",
