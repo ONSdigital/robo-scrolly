@@ -6,7 +6,7 @@ import { filter, cols, source_dir, data_file, template_file, files_to_copy } fro
 
 // Load data CSV
 let data_raw = readFileSync(source_dir + data_file, {encoding:'utf8', flag:'r'});
-let data = new MagicArray(...csvParse(data_raw, autoType));
+let data = new MagicArray(...csvParse(data_raw.replace(/\uFEFF/g, ''), autoType));
 
 // Create the output directories (if they don't exist)
 let dir = "./static/data/json";
