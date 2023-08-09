@@ -1,5 +1,5 @@
 // Locations of data file and template (path to a local or shared drive)
-export const source_dir = "./demo-data/"
+export const source_dir = "./demo-data"
 export const data_file = "data.csv";
 export const template_file = "template.pug";
 

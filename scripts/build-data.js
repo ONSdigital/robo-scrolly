@@ -1,11 +1,11 @@
-import { readFileSync, writeFileSync, existsSync, mkdirSync } from "fs";
+import { readFileSync, writeFileSync, existsSync, mkdirSync, copyFileSync } from "fs";
 import { csvParse } from "d3-dsv";
 import { MagicArray, renderJSON, autoType } from "@onsvisual/robo-utils";
 import pug from "pug";
 import { filter, cols, source_dir, data_file, template_file, files_to_copy } from "./build-data.config.js";
 
 // Load data CSV
-let data_raw = readFileSync(source_dir + data_file, {encoding:'utf8', flag:'r'});
+let data_raw = readFileSync(`${source_dir}/${data_file}`, {encoding:'utf8', flag:'r'});
 let data = new MagicArray(...csvParse(data_raw.replace(/\uFEFF/g, ''), autoType));
 
 // Create the output directories (if they don't exist)
@@ -15,7 +15,7 @@ if (!existsSync(dir)){
 }
 
 // Load PUG file
-let template = readFileSync(source_dir + template_file, {encoding:'utf8', flag:'r'});
+let template = readFileSync(`${source_dir}/${template_file}`, {encoding:'utf8', flag:'r'});
 
 // Process data file into array of LAs and keyed lookup of all geographies
 let places = Array.isArray(filter) && filter.length > 0 ? data.filter(d => filter.includes(d.areacd.slice(0,3))) : data;
@@ -45,6 +45,13 @@ places.forEach(place => rows.push(cols.map(col => {
 csv_str += rows.join("\n");
 
 // Write filtered CSV output
-let path = "./static/data/places.csv";
+const path = "./static/data/places.csv";
 writeFileSync(path, csv_str);
 console.log(`Wrote ${path}`);
+
+// Copy other files from source
+files_to_copy.forEach(file => {
+    const path = `./static/data/${file}`;
+    copyFileSync(`${source_dir}/${file}`, path);
+    console.log(`Copied ${path}`);
+});
