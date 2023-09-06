@@ -71,7 +71,7 @@ When you're ready to publish the app (either for preview or for production), you
 npm run build
 ```
 
-Before building the app, you'll need to customise the base path in the **/svelte.config.js** file. The default path is **/robo-embed**. You'll beed to change this to the base-relative path on your server where you intend to place the contents of the **/build** folder (eg. **/visualisations/my-app**):
+Before building the app, you'll need to customise the base path in the **/svelte.config.js** file. The default path is **/robo-embed**. You'll need to change this to the base-relative path on your server where you intend to place the contents of the **/build** folder (eg. **/visualisations/my-app**):
 
 ```javascript
 paths: {
