@@ -15,7 +15,7 @@ npm install
 Next, run this command to build the demo data files. This will read the PUG and CSV files in the **/demo-data** folder, and write JSON and CSV files to **/static/data**:
 
 ```bash
-npm run build-data
+npm run build:data
 ```
 
 And, finally, run the demo in preview/dev mode. It should be viewable at [localhost:5173](http://localhost:5173):
@@ -32,7 +32,7 @@ Once your app is running, you can also see what the page would look like within 
 
 To use your own CSV data and PUG template, you will either need to overwrite the demo data or, for better collaboration, read directly from your project source files on a shared network drive (this also avoids the risk of writing data files to insecure locations).
 
-When you move the files, you'll need to change the following parameters in the **/scripts/build-data.config.js** file:
+When you move the files, you'll need to change the following parameters in the **/src/app.config.js** file:
 
 ```javascript
 // Locations of data file and template (path to a local or shared drive)
@@ -71,10 +71,9 @@ When you're ready to publish the app (either for preview or for production), you
 npm run build
 ```
 
-Before building the app, you'll need to customise the base path in the **/svelte.config.js** file. The default path is **/robo-embed**. You'll need to change this to the base-relative path on your server where you intend to place the contents of the **/build** folder (eg. **/visualisations/my-app**):
+Before building the app, you'll need to customise the base paths in the **/app.config.js** file. The default path is **/robo-embed**. You can set a separate base-relative path for a preview server (eg. **/my-app**) and for a production server (eg. **/visualisations/my-app**):
 
 ```javascript
-paths: {
-  base: production ? '/robo-embed' : ''
-},
+export const base_prod = '/robo-embed'; // Directory on the ONS website
+export const base_preview = '/robo-embed'; // Directory on datavisweb preview server or Github Pages
 ```
