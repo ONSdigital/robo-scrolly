@@ -1,10 +1,6 @@
-<main>
-  <slot/>
-</main>
+<script>
+  import "@onsvisual/svelte-components/css/main.css";
+  import "../app.css";
+</script>
 
-<style>
-  main {
-    max-width: 670px;
-    margin: 0 auto;
-  }
-</style>
+<slot/>
