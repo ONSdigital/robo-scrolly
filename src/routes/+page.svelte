@@ -26,9 +26,10 @@
     const code = cd || e?.detail?.areacd;
     data.place = await getPlace(`${base}/data/json/${code}.json`);
     selected = data.places.find(d => d?.areacd === code);
-    console.log(e);
-    e.target.blur();
-    window.scrollTo(0,0);
+    // console.log(e);
+    document.getElementById("select").blur()
+    // e.currentTarget.blur();
+    // window.scrollTo(0,0);
     analyticsEvent({
       event: cd ? "clickSelect" : "searchSelect",
       areaCode: data.place.place.areacd,
