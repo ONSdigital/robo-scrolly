@@ -1,7 +1,7 @@
 {
   "name": "@onsvisual/robo-embed",
   "homepage": "http://onsvisual.github.io/robo-embed",
-  "version": "0.3.1",
+  "version": "0.3.2",
   "scripts": {
     "dev": "vite dev",
     "build": "vite build && node ./scripts/js-fix",
