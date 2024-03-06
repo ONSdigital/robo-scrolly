@@ -57,7 +57,7 @@
         id={section.id}
         {style}
         bind:map={map}
-        interactive={true}
+        interactive={false}
         location={{
             bounds: regionBbox,
         }}
