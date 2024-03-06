@@ -51,5 +51,26 @@ else
         prop.title Oldest local authorities #{lookup[place.parentcd].getName("in")}, 2020
         prop.footer Source: Office for National Statistics
         prop.data= places.filterBy("parentcd", place.parentcd).top("age_med", 5).toData({x: "age_med", y: "areanm"})
-        prop.xMin= 35
+        prop.xMin= 0
         prop.padding-left= 120
+
+    section#chart-scatter.Chart
+        prop.chartType scatter
+        prop.title Scatter chart title 
+        prop.data= places.toData({x:"density",y:"age_med",r:"area",idKey:"areacd",z:"parentcd",labelKey:"areanm"})
+        prop.height= "500px"
+        prop.selected= place.areacd 
+        prop.rKey= "r"
+        prop.idKey= "idKey"
+        prop.labelKey= "labelKey"
+        prop.r #{"[2,20]"}
+
+    section#map.Map
+        prop.data= places.filterBy("parentcd", place.parentcd).toData({x: "density", areanm: "areanm",areacd:"areacd"})
+        prop.selected= place.areacd
+        prop.height= "300px"
+        prop.title Density #{place.getName("in")} and other local authorities #{lookup[place.parentcd].getName("in")}
+        prop.footer Source: Office for National Statistics
+        prop.regioncd= place.parentcd
+
+

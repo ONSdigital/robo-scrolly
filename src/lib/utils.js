@@ -12,6 +12,27 @@ export function getMotion() {
 	return !mediaQuery || mediaQuery.matches ? false : true; // return true for motion, false for no motion
 }
 
+export default async function loadJson(url) {
+	const response = await fetch(url);
+	const data = await response.json();
+	return data;
+}
+
+export function getColor(value, breaks, colors) {
+  let color;
+  let found = false;
+  let i = 1;
+  while (found == false) {
+    if (value <= breaks[i]) {
+      color = colors[i - 1];
+      found = true;
+    } else {
+      i ++;
+    }
+  }
+  return color ? color : 'lightgrey';
+}
+
 // DEMO-SPECIFIC FUNCTIONS
 export async function getData(url, fetch = window.fetch) {
   let response = await fetch(url);

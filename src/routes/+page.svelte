@@ -12,28 +12,33 @@
     Select,
     Notice,
     Twisty,
-    Container
+    Container,
   } from "@onsvisual/svelte-components";
   import { Chart } from "@onsvisual/svelte-charts";
   import ChartActions from "$lib/layout/ChartActions.svelte";
   import SummaryItem from "$lib/layout/SummaryItem.svelte";
+  import RoboMap from "$lib/layout/RoboMap.svelte";  
 
   export let data;
 
+  $: console.log(data.place.sections);
+
   let selected;
+
+  let map1;
 
   async function doSelect(e, cd = null) {
     const code = cd || e?.detail?.areacd;
     data.place = await getPlace(`${base}/data/json/${code}.json`);
-    selected = data.places.find(d => d?.areacd === code);
+    selected = data.places.find((d) => d?.areacd === code);
     // console.log(e);
-    document.getElementById("select").blur()
+    document.getElementById("select").blur();
     // e.currentTarget.blur();
     // window.scrollTo(0,0);
     analyticsEvent({
       event: cd ? "clickSelect" : "searchSelect",
       areaCode: data.place.place.areacd,
-      areaName: data.place.place.areanm
+      areaName: data.place.place.areanm,
     });
   }
 
@@ -48,7 +53,12 @@
 
   const analyticsProps = (() => {
     const props = {};
-    for (const key in ["contentTitle", "releaseDate", "outputSeries", "contentType"]) {
+    for (const key in [
+      "contentTitle",
+      "releaseDate",
+      "outputSeries",
+      "contentType",
+    ]) {
       if (data?.meta?.[key]) props[key] = data.meta[key];
     }
     return props;
@@ -56,8 +66,8 @@
 </script>
 
 <svelte:head>
-  <title>{data?.meta?.title || ''}</title>
-	<meta name="description" content="{data?.meta?.description || ''}" />
+  <title>{data?.meta?.title || ""}</title>
+  <meta name="description" content={data?.meta?.description || ""} />
   <meta name="robots" content="noindex" />
   <meta name="googlebot" content="indexifembedded" />
 </svelte:head>
@@ -66,13 +76,15 @@
   <AnalyticsBanner {analyticsProps} hideBanner />
   {#each data.place.sections as section}
     {#if section.type === "Meta"}
-        <!-- meta -->
+      <!-- meta -->
     {:else if section.type === "Header"}
-      <img src="{base}/img/header.png" alt=""/>
+      <img src="{base}/img/header.png" alt="" />
       <Highlight height="auto" marginBottom={false}>
         <div style:padding="12px 24px 0" style:margin-bottom="-22px">
           {#if section.title}<h2 aria-live="polite">{section.title}</h2>{/if}
-          {#if section.label}<label for="select" style:font-size="1rem">{section.label}</label>{/if}
+          {#if section.label}<label for="select" style:font-size="1rem"
+              >{section.label}</label
+            >{/if}
           <Select
             id="select"
             idKey="areacd"
@@ -81,29 +93,40 @@
             mode="search"
             on:change={doSelect}
             placeholder="Type an area name..."
-            floatingConfig="{{ strategy: 'fixed' }}"
+            floatingConfig={{ strategy: "fixed" }}
           />
         </div>
       </Highlight>
     {:else if section.type === "Highlight"}
-      <Highlight id={section.id} height="auto" marginTop={false} marginBottom={false} theme="light">
+      <Highlight
+        id={section.id}
+        height="auto"
+        marginTop={false}
+        marginBottom={false}
+        theme="light"
+      >
         {@html section.content || ""}
       </Highlight>
     {:else if section.type === "Chart" && section.chartType}
-    <Grid width="narrow" colwidth="full">
-      <div class="chart-outer">
-        <Chart {section} />
-        {#if section.note}
-        <div class="chart-note">{section.note}</div>
-        {/if}
-      </div>
-      <ChartActions {section} place="{data.place.place}" />
-    </Grid>
+      <Grid width="narrow" colwidth="full">
+        <div class="chart-outer">
+          <Chart {section} />
+          {#if section.note}
+            <div class="chart-note">{section.note}</div>
+          {/if}
+        </div>
+        <ChartActions {section} place={data.place.place} />
+      </Grid>
     {:else if section.type === "Summary"}
-      <Section id={section.id} title={section.title} marginTop marginBottom={false}/>
+      <Section
+        id={section.id}
+        title={section.title}
+        marginTop
+        marginBottom={false}
+      />
       <Grid width="narrow" colwidth="full" height={100}>
         {#each section.sections as sub}
-        <SummaryItem section={sub}/>
+          <SummaryItem section={sub} />
         {/each}
       </Grid>
     {:else if section.type === "Warning"}
@@ -111,6 +134,10 @@
         <Notice mode="warning" important>
           {@html section.content || ""}
         </Notice>
+      </Section>
+    {:else if section.type === "Map"}
+      <Section cls="section-map">
+        <RoboMap {section} --height={section.height}></RoboMap>
       </Section>
     {:else}
       <Section id={section.id} title={section.title}>
@@ -123,17 +150,21 @@
     <Twisty title="All versions of this article">
       <Grid colwidth="narrow">
         {#each regions as region}
-          {#each [data.places.filter(p => p.parentcd === region.cd)] as places}
-          {#if places[0]}
-          <div>
-            <strong>{region.nm}</strong>
-            <div style:font-size="smaller">
-              {#each places as place}
-              <button class="btn-link" on:click={(e) => doSelect(e, place.areacd)}>{place.areanm}</button><br/>
-              {/each}
-            </div>
-          </div>
-          {/if}
+          {#each [data.places.filter((p) => p.parentcd === region.cd)] as places}
+            {#if places[0]}
+              <div>
+                <strong>{region.nm}</strong>
+                <div style:font-size="smaller">
+                  {#each places as place}
+                    <button
+                      class="btn-link"
+                      on:click={(e) => doSelect(e, place.areacd)}
+                      >{place.areanm}</button
+                    ><br />
+                  {/each}
+                </div>
+              </div>
+            {/if}
           {/each}
         {/each}
       </Grid>
