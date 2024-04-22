@@ -57,13 +57,11 @@ else
     section#chart-scatter.Chart
         prop.chartType scatter
         prop.title Scatter chart title 
-        prop.data= places.toData({x:"density",y:"age_med",r:"area",idKey:"areacd",z:"parentcd",labelKey:"areanm"})
+        prop.data= places.toData({x:"density",y:"age_med",r:"area",areacd:"areacd",z:"parentcd",areanm:"areanm"})
         prop.height= "500px"
         prop.selected= place.areacd 
         prop.rKey= "r"
-        prop.idKey= "idKey"
-        prop.labelKey= "labelKey"
-        prop.r #{"[2,20]"}
+        prop.r= "2|20"
 
     section#map.Map
         prop.data= places.filterBy("parentcd", place.parentcd).toData({x: "density", areanm: "areanm",areacd:"areacd"})
