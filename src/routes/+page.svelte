@@ -30,6 +30,15 @@
   async function doSelect(e, cd = null) {
     const code = cd || e?.detail?.areacd;
     data.place = await getPlace(`${base}/data/json/${code}.json`);
+
+    data.place.sections.forEach(d=>{
+      if(d.type=='Chart' && d.chartType=='line' && d.xScale=='time'){
+        d.data.forEach(function(e){
+          e.x = new Date (e.x)
+        })
+      }
+    })  
+    
     selected = data.places.find((d) => d?.areacd === code);
     // console.log(e);
     document.getElementById("select").blur();
