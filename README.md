@@ -4,6 +4,8 @@ A Svelte Kit template for creating embedded semi-automated journalism content to
 
 The template is design to use PUG templates and wide-format CSV files, as created within [this editor](https://github.com/ONSvisual/robo-editor).
 
+Note: If you'd like to create semi-automated articles on standalone pages, please use this [alternative template](https://github.com/ONSvisual/robo-article).
+
 ## Getting started
 
 Create a fork or local copy of this repository, and then run the following command to install dependencies:
