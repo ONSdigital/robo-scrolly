@@ -1,6 +1,6 @@
 # robo-embed
 
-A Svelte Kit template for creating embedded semi-automated journalism content to sit within an iframe.
+A Svelte Kit template for creating embedded semi-automated journalism (AKA "robo-journalism") content to sit within an iframe.
 
 The template is design to use PUG templates and wide-format CSV files, as created within [this editor](https://github.com/ONSvisual/robo-editor).
 
