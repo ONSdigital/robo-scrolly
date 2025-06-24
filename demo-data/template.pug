@@ -41,6 +41,7 @@ else
         prop.footer Source: Office for National Statistics
         prop.data= places.filterBy("parentcd", place.parentcd).top("density", 5).toData({x: "density", y: "areanm"})
         prop.padding-left= 120
+        prop.directLabel= true
 
     section.Section
         prop.title Median age #{place.getName("in")}
@@ -48,11 +49,13 @@ else
 
     section#chart-age.Chart
         prop.chartType bar
+        prop.xSuffix= " years"
+        prop.directLabel= true
         prop.title Oldest local authorities #{lookup[place.parentcd].getName("in")}, 2020
         prop.footer Source: Office for National Statistics
         prop.data= places.filterBy("parentcd", place.parentcd).top("age_med", 5).toData({x: "age_med", y: "areanm"})
-        prop.xMin= 0
         prop.padding-left= 120
+        prop.padding-right= 10
 
     section#chart-scatter.Chart
         prop.chartType scatter
