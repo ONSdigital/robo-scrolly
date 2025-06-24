@@ -1,4 +1,6 @@
 import { csvParse, autoType } from 'd3-dsv';
+import { feature } from 'topojson-client';
+import ckmeans from 'ckmeans';
 
 // CORE FUNCTIONS
 export function setColors(themes, theme) {
@@ -12,10 +14,24 @@ export function getMotion() {
 	return !mediaQuery || mediaQuery.matches ? false : true; // return true for motion, false for no motion
 }
 
-export default async function loadJson(url) {
-	const response = await fetch(url);
-	const data = await response.json();
-	return data;
+// DEMO-SPECIFIC FUNCTIONS
+export async function getData(url, fetch = window.fetch) {
+  let response = await fetch(url);
+  let string = await response.text();
+  let data = csvParse(string, autoType);
+  return data.sort((a, b) => a.areanm.localeCompare(b.areanm));
+}
+
+export async function getPlace(url, fetch = window.fetch) {
+  let response = await fetch(url);
+  return await response.json();
+}
+
+export async function getTopo(url, layer, fetch = window.fetch) {
+  let response = await fetch(url);
+  let json = await response.json();
+  let geojson = await feature(json, layer);
+  return geojson;
 }
 
 export function getColor(value, breaks, colors) {
@@ -33,17 +49,11 @@ export function getColor(value, breaks, colors) {
   return color ? color : 'lightgrey';
 }
 
-// DEMO-SPECIFIC FUNCTIONS
-export async function getData(url, fetch = window.fetch) {
-  let response = await fetch(url);
-  let string = await response.text();
-  let data = csvParse(string, autoType);
-  return data.sort((a, b) => a.areanm.localeCompare(b.areanm));
-}
-
-export async function getPlace(url, fetch = window.fetch) {
-  let response = await fetch(url);
-  return await response.json();
+export function getBreaks(vals) {
+	vals.sort((a, b) => a - b);
+	let breaks = ckmeans(vals, 5);
+	breaks.push(vals[vals.length - 1]);
+	return breaks;
 }
 
 export function makeDatasets(data, colors, geo) {

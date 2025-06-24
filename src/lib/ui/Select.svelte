@@ -131,7 +131,6 @@
 		--multiItemBG: grey;
 		--multiItemActiveBG: grey;
 		--spinnerColor: rgba(255,255,255,0);
-    --listMaxHeight: 124px;
   }
 	:global(.selectbox, .selectbox input, .selectbox .item, .selectbox svg) {
 		cursor: pointer !important;

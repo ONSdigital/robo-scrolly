@@ -3,7 +3,6 @@
 .DS_Store
 *.bak
 .svelte-kit/
-/build/
-/static/data/json/
-/static/data/places.csv
-/package-lock.json
+build/
+static/data/json/
+static/data/places.csv
