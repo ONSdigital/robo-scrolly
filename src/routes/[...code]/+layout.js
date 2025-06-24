@@ -5,6 +5,9 @@ import { base } from "$app/paths";
 import bbox from "@turf/bbox";
 import { getData, getTopo } from "$lib/utils";
 
+export const prerender = true;
+export const trailingSlash = 'always';
+
 export async function load({ fetch }) {
 	let geojson = await getTopo(`${base}/data/geo_lad2015.json`, 'LAD15merc', fetch);
 	let mapbounds = bbox(geojson);
