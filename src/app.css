@@ -1,311 +1,81 @@
-@import url('https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;700&display=swap');
-
-/* GLOBALS */
-
-* {
-	box-sizing: border-box;
+.standfirst {
+  font-size: 24px;
+  margin-top: -16px;
 }
 
-html, body {
-	position: relative;
-	width: 100%;
-	height: 100%;
+.chart-note {
+  font-size: 0.8em;
+  color: rgb(102, 102, 102);
+  min-height: auto !important;
+  margin-top: 8px;
 }
 
-body {
-	color: #222;
-	background-color: #fff;
-	margin: 0;
-	padding: 0;
-	-webkit-box-sizing: border-box;
-	        box-sizing: border-box;
-	font-family: "Open Sans", "Helvetica Neue", "Arial", sans-serif;
-	font-size: 21px;
-	line-height: 1.5;
-	word-wrap: break-word;
+.section-warning .ons-panel {
+  border-top: 1px solid #222 !important;
+  border-bottom: 1px solid #222 !important;
+  padding: 24px 0;
 }
 
-/* COMPONENTS */
-
-a {
-	color: #206095;
+.ons-panel__icon {
+  top: 50%;
+  transform: translateY(-50%);
 }
 
-a:hover {
-	color: #323132;
+.chart-outer {
+  width: 100%;
+  font-size: 14px;
 }
 
-label {
-	display: block;
+.chart-footer {
+  font-size: 16px;
+  margin: 16px 0 8px;
+  color: rgb(102, 102, 102) !important;
 }
 
-input, button, select, textarea {
-	font-family: inherit;
-	font-size: inherit;
-	-webkit-padding: 0.4em 0;
-	padding: 0.4em;
-	margin: 0 0 0.5em 0;
-	-webkit-box-sizing: border-box;
-	        box-sizing: border-box;
-	border: 1px solid #ccc;
-	border-radius: 2px;
+.chart-label {
+  font-weight: bold;
 }
 
-input:disabled {
-	color: #ccc;
+button, input, optgroup, select, textarea {
+  font-family: 'OpenSans', 'Helvetica Neue', arial, sans-serif !important;
 }
 
-button {
-	color: #333;
-	background-color: #f4f4f4;
-	outline: none;
+.ons-metadata {
+  margin: 32px 0 -24px !important;
 }
 
-button:disabled {
-	color: #999;
+h1.ons-u-fs-xxxl {
+  font-size: 38px;
+  line-height: 48px;
 }
 
-button:not(:disabled):active {
-	background-color: #ddd;
+button.btn-link {
+  background: none;
+  border: 0;
+  padding: 0;
+  margin: 0;
+  color: var(--ons-color-text-link);
+  text-decoration: underline solid var(--ons-color-text-link) 1px;
+  text-underline-position: under;
+  text-align: left;
+  line-height: 1.5;
 }
 
-button:focus {
-	border-color: #666;
+button.btn-link:hover {
+  color: var(--ons-color-text-link-hover);
+  text-decoration: underline solid var(--ons-color-text-link-hover) 2px;
 }
 
-header, section, nav, footer, figure, caption {
-	display: -webkit-box;
-	display: -ms-flexbox;
-	display: flex;
-	-webkit-box-pack: center;
-	    -ms-flex-pack: center;
-	        justify-content: center;
-	background-position: center;
-	background-repeat: no-repeat;
-	background-size: cover;
-	margin: 0;
-	padding: 0;
+button.btn-link:focus {
+  background-color: var(--ons-color-focus);
+  box-shadow: 0 2px var(--ons-color-focus),0 4px var(--ons-color-text-link-focus);
+  color: var(--ons-color-text-link-focus);
+  outline: 3px solid transparent;
+  outline-offset: 1px;
 }
 
-footer {
-	margin: 60px 0 0 0;
-}
-
-h1 {
-	font-size: 54px;
-	line-height: 1.3;
-	margin: 30px 0 0 0;
-}
-
-h2 {
-	font-size: 30px;
-	margin: 40px 0 -20px 0;
-}
-
-h3 {
-	font-size: 22px;
-	margin: 40px 0 -10px 0;
-}
-
-p {
-	margin: 30px 0 0 0;
-}
-header p:nth-of-type(2) {
-	margin-top: 20px;
-}
-
-img {
-	max-width: 100%;
-	height: auto;
-	vertical-align: middle;
-}
-
-blockquote {
-	margin: 30px 0 6px 0;
-	font-size: 30px;
-	color: #777;
-}
-
-small {
-	font-size: 16px;
-}
-
-/* CLASSES */
-
-.col-full {
-	width: 100%;
-}
-
-.col-wide {
-	width: 100%;
-	max-width: 980px;
-	margin: 0 24px;
-}
-
-.col-medium {
-	width: 100%;
-	max-width: 680px;
-	margin: 0 24px;
-}
-
-.col-narrow {
-	width: 100%;
-	max-width: 540px;
-	margin: 0 24px;
-}
-
-.height-full {
-	position: relative;
-	height: 100vh !important;
-}
-
-.center {
-	text-align: center;
-}
-
-.middle {
-	height: 100%;
-	display: -webkit-box;
-	display: -ms-flexbox;
-	display: flex;
-	-webkit-box-orient: vertical;
-	-webkit-box-direction: normal;
-	    -ms-flex-direction: column;
-	        flex-direction: column;
-	-webkit-box-pack: center;
-	    -ms-flex-pack: center;
-	        justify-content: center;
-}
-
-.caption {
-	margin-top: 8px;
-	text-align: left;
-	font-size: 16px;
-	color: #777;
-}
-
-.inset-medium {
-	max-width: 680px;
-	margin-left: auto !important;
-	margin-right: auto !important;
-}
-
-.inset-narrow {
-	max-width: 480px;
-	margin-left: auto !important;
-	margin-right: auto !important;
-}
-
-.text-big {
-	font-size: 30px;
-	margin: 20px 0;
-}
-header .text-big {
-	margin-top: 5px;
-}
-
-.text-small {
-	font-size: 16px;
-}
-
-.text-indent {
-	margin-left: 30px;
-}
-
-.text-shadow {
-	text-shadow: 0 0 8px #000;
-}
-
-.text-bold {
-	font-weight: bold;
-}
-
-.text-muted {
-	color: #777;
-}
-
-.mt {
-	margin-top: 72px;
-}
-
-.mb {
-	margin-bottom: 40px;
-}
-
-.em {
-	padding: 1px 4px 1px 4px;
-/*	border-radius: 5px; */
-	font-weight: bold;
-	white-space: nowrap;
-}
-
-.em-muted {
-	background-color: #777;
-	color: #fff;
-}
-
-/* SCROLL-SPECIFIC ELEMENTS */
-
-svelte-scroller-background-container {
-	pointer-events: all !important;
-}
-
-[slot="foreground"] section {
-	padding: 100vh 0 100vh 0;
-}
-
-[slot="foreground"] section + section {
-	padding: 0 0 100vh 0;
-}
-
-[slot="foreground"] section > div {
-	padding: 12px;
-	position: relative;
-	background-color: rgba(255,255,255,0.8);
-}
-
-[slot="foreground"] section div p {
-	margin: 0;
-}
-
-[slot="foreground"] section div p + p {
-	margin-top: 30px;
-}
-
-[slot="foreground"] section div h2,
-[slot="foreground"] section div h3 {
-	margin: 10px 0 20px 0;
-}
-
-@media (min-width: 992px) {
-	.splitscreen svelte-scroller-background {
-		width: calc(100% - 480px) !important;
-		min-width: 65%;
-		margin: 0 0 0 auto;
-	}
-	.splitscreen [slot="foreground"] section div::before {
-		opacity: 0;
-	}
-	.splitscreen [slot="foreground"] section {
-		width: 480px;
-		max-width: 35%;
-		margin: 0 auto 0 0;
-		background-color: #fff;
-	}
-	.splitscreen [slot="foreground"] .col-medium {
-		width: 100%;
-		margin: 0;	
-		padding: 0 30px;
-	}
-}
-
-.visually-hidden {
-	position: absolute;
-	width: 1px;
-	height: 1px;
-	margin: -1px;
-	padding: 0;
-	overflow: hidden;
-	clip: rect(0,0,0,0);
-	border: 0;
+label[for=select].ons-label {
+  display: block;
+  font-weight: normal;
+  margin: 0 0 14px;
 }
