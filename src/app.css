@@ -27,6 +27,8 @@
 }
 
 .chart-footer {
+  font-size: 16px;
+  margin: 16px 0 8px;
   color: rgb(102, 102, 102) !important;
 }
 

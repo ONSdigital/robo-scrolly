@@ -149,7 +149,7 @@
       </Section>
     {:else if section.type === "Map"}
       <Section cls="section-map">
-        <RoboMap {section} --height={section.height}></RoboMap>
+        <RoboMap {section} height={section.height}></RoboMap>
       </Section>
     {:else}
       <Section id={section.id} title={section.title}>
