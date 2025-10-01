@@ -1,6 +1,6 @@
 {
   "name": "@onsvisual/robo-scrolly",
-  "homepage": "http://onsvisual.github.io/robo-scrolly",
+  "homepage": "http://onsdigital.github.io/robo-scrolly",
   "version": "0.2.0",
   "scripts": {
     "dev": "vite dev",
