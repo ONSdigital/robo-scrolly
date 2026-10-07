@@ -1,3 +1,11 @@
+<script module>
+	// MapLibre can't find its worker script once Vite has bundled it, so point it at the bundled copy
+	// before any map is created (see the @onsvisual/svelte-maps README)
+	import { setWorkerUrl } from "maplibre-gl";
+	import maplibreWorkerUrl from "maplibre-gl/dist/maplibre-gl-worker.mjs?worker&url";
+	setWorkerUrl(maplibreWorkerUrl);
+</script>
+
 <script>
 	import { base } from "$app/paths";
 
