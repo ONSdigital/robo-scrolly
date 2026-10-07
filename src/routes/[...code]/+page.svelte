@@ -191,7 +191,7 @@
 
 {#each content.sections as section}
 	{#if section.type == "Header"}
-		<Hero theme="blue" title={section.title} lede={section.lede} censusLogo>
+		<Hero theme="blue" title={section.title} lede={section.lede}>
 			{@html section.content}
 			<Checkbox
 				id="animate-checkbox"
