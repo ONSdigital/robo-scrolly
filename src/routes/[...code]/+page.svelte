@@ -72,10 +72,10 @@
 	function doSelect(e) {
 		let selected_new = e.detail.areacd ? e.detail.areacd : e.detail.id;
 		if (e.detail.feature) fitById(selected); // Fit map if select event comes from map
-		goto(`${base}/${selected_new}/`, { noscroll: true, keepfocus: true });
+		goto(`${base}/${selected_new}/`, { noScroll: true, keepFocus: true });
 	}
 	function doClear() {
-		goto(`${base}/`, { noscroll: true, keepfocus: true });
+		goto(`${base}/`, { noScroll: true, keepFocus: true });
 	}
 	function doHover(e) {
 		hovered = e.detail.id;

@@ -12,14 +12,16 @@ const config = {
 			assets: "build"
 		}),
 		prerender: {
-			enabled: production,
 			entries: ["/", "/embed/"],
-			onError: "continue"
+			handleHttpError: "warn",
+			handleMissingId: "warn"
 		},
 		paths: {
-			base: production ? "/robo-scrolly" : ""
-		},
-		trailingSlash: "always"
+			base: production ? "/robo-scrolly" : "",
+			// Absolute paths, as in SvelteKit 1, because the page builds absolute ons.gov.uk URLs
+			// (canonical and og:url tags)
+			relative: false
+		}
 	}
 };
 
