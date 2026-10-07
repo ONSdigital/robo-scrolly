@@ -1,5 +1,3 @@
-export const prerender = true;
-
 import { asset } from "$app/paths";
 import { getData } from "$lib/utils";
 

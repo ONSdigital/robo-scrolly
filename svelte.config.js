@@ -14,7 +14,10 @@ const config = {
 		adapter: adapter({
 			// Options below are defaults
 			pages: "build",
-			assets: "build"
+			assets: "build",
+			strict: false,
+			// Preview builds are a single fallback page rather than prerendered pages
+			fallback: preview ? "404.html" : undefined
 		}),
 		prerender: {
 			entries: ["/", "/embed/"],

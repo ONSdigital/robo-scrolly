@@ -1,5 +1,3 @@
-export const prerender = true;
-
 import { asset } from "$app/paths";
 import { getPlace, getBreaks, getColor } from "$lib/utils";
 import { colors } from "$lib/config";
