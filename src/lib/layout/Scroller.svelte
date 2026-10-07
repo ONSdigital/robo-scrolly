@@ -1,35 +1,38 @@
 <script context="module">
-  // Based on svelte-scroller by Rich Harris
+	// Based on svelte-scroller by Rich Harris
 	// https://github.com/sveltejs/svelte-scroller
-  // Extended to allow for split-screen mode, section IDs and on:change event
+	// Extended to allow for split-screen mode, section IDs and on:change event
 	const handlers = [];
 	let manager;
 
-	if (typeof window !== 'undefined') {
-		const run_all = () => handlers.forEach(fn => fn());
+	if (typeof window !== "undefined") {
+		const run_all = () => handlers.forEach((fn) => fn());
 
-		window.addEventListener('scroll', run_all);
-		window.addEventListener('resize', run_all);
+		window.addEventListener("scroll", run_all);
+		window.addEventListener("resize", run_all);
 	}
 
-	if (typeof IntersectionObserver !== 'undefined') {
+	if (typeof IntersectionObserver !== "undefined") {
 		const map = new Map();
 
-		const observer = new IntersectionObserver((entries, observer) => {
-			entries.forEach(entry => {
-				const update = map.get(entry.target);
-				const index = handlers.indexOf(update);
+		const observer = new IntersectionObserver(
+			(entries, observer) => {
+				entries.forEach((entry) => {
+					const update = map.get(entry.target);
+					const index = handlers.indexOf(update);
 
-				if (entry.isIntersecting) {
-					if (index === -1) handlers.push(update);
-				} else {
-					update();
-					if (index !== -1) handlers.splice(index, 1);
-				}
-			});
-		}, {
-			rootMargin: '400px 0px' // TODO why 400?
-		});
+					if (entry.isIntersecting) {
+						if (index === -1) handlers.push(update);
+					} else {
+						update();
+						if (index !== -1) handlers.splice(index, 1);
+					}
+				});
+			},
+			{
+				rootMargin: "400px 0px" // TODO why 400?
+			}
+		);
 
 		manager = {
 			add: ({ outer, update }) => {
@@ -64,16 +67,16 @@
 </script>
 
 <script>
-	import { onMount, createEventDispatcher } from 'svelte';
+	import { onMount, createEventDispatcher } from "svelte";
 	const dispatch = createEventDispatcher();
 
 	// config
 	export let top = 0;
 	export let bottom = 1;
 	export let threshold = 0.5;
-	export let query = 'section';
+	export let query = "section";
 	export let parallax = false;
-  export let splitscreen = false; // Add class to allow for split-screen styling option
+	export let splitscreen = false; // Add class to allow for split-screen styling option
 
 	// bindings
 	export let index = 0;
@@ -81,7 +84,7 @@
 	export let offset = 0;
 	export let progress = 0;
 	export let visible = false;
-  export let id = null; // Unique ID for scroller
+	export let id = null; // Unique ID for scroller
 	export let sectionId = null; // ID for current section within scroller
 
 	let outer;
@@ -103,13 +106,13 @@
 	$: (top, bottom, threshold, parallax, update());
 
 	$: style = `
-		position: ${fixed ? 'fixed' : 'absolute'};
+		position: ${fixed ? "fixed" : "absolute"};
 		top: 0;
 		transform: translate(0, ${offset_top}px);
 		z-index: ${inverted ? 3 : 1};
 	`;
 
-	$: widthStyle = fixed ? `width:${width}px;` : '';
+	$: widthStyle = fixed ? `width:${width}px;` : "";
 
 	onMount(() => {
 		sections = foreground.querySelectorAll(query);
@@ -148,13 +151,13 @@
 			fixed = false;
 		} else if (progress >= 1) {
 			offset_top = parallax
-				? (foreground_height - background_height)
-				: (foreground_height - available_space);
+				? foreground_height - background_height
+				: foreground_height - available_space;
 			fixed = false;
 		} else {
-			offset_top = parallax ?
-				Math.round(top_px - progress * (background_height - available_space)) :
-				top_px;
+			offset_top = parallax
+				? Math.round(top_px - progress * (background_height - available_space))
+				: top_px;
 			fixed = true;
 		}
 
@@ -167,21 +170,21 @@
 
 			offset = (threshold_px - top) / (bottom - top);
 			if (bottom >= threshold_px) {
-        if (index !== i) {
-          index = i;
-          sectionId = section.dataset.id ? section.dataset.id : null;
-          dispatch('change', {id, index, sectionId});
-        }
+				if (index !== i) {
+					index = i;
+					sectionId = section.dataset.id ? section.dataset.id : null;
+					dispatch("change", { id, index, sectionId });
+				}
 				break;
 			}
 		}
 	}
 </script>
 
-<svelte:window bind:innerHeight={wh}/>
+<svelte:window bind:innerHeight={wh} />
 
 <svelte-scroller-outer {id} bind:this={outer} class:splitscreen>
-	<svelte-scroller-background-container class='background-container' style="{style}{widthStyle}">
+	<svelte-scroller-background-container class="background-container" style="{style}{widthStyle}">
 		<svelte-scroller-background bind:this={background}>
 			<slot name="background"></slot>
 		</svelte-scroller-background>
@@ -211,7 +214,7 @@
 	}
 
 	svelte-scroller-foreground::after {
-		content: ' ';
+		content: " ";
 		display: block;
 		clear: both;
 	}

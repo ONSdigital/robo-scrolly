@@ -1,25 +1,25 @@
 /** @type {import('@sveltejs/kit').Config} */
-import adapter from '@sveltejs/adapter-static';
+import adapter from "@sveltejs/adapter-static";
 
-const production = process.env.NODE_ENV === 'production';
+const production = process.env.NODE_ENV === "production";
 
 const config = {
 	kit: {
 		// hydrate the <div id="svelte"> element in src/app.html
 		adapter: adapter({
 			// Options below are defaults
-			pages: 'build',
-			assets: 'build'
+			pages: "build",
+			assets: "build"
 		}),
 		prerender: {
 			enabled: production,
-			entries: ['/', '/embed/'],
-			onError: 'continue'
+			entries: ["/", "/embed/"],
+			onError: "continue"
 		},
 		paths: {
-			base: production ? '/robo-scrolly' : ''
+			base: production ? "/robo-scrolly" : ""
 		},
-		trailingSlash: 'always'
+		trailingSlash: "always"
 	}
 };
 

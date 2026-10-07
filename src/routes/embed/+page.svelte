@@ -1,5 +1,5 @@
 <script>
-  import "../../app.css";
+	import "../../app.css";
 	import { onMount, setContext } from "svelte";
 	import { base } from "$app/paths";
 	import { regions } from "$lib/config";
@@ -7,12 +7,12 @@
 	import Media from "$lib/layout/Media.svelte";
 	import Select from "$lib/ui/Select.svelte";
 
-  export let data;
+	export let data;
 
-  // STYLE CONFIG
-  // Set theme globally (options are 'light' or 'dark')
-  let theme = "light";
-  setContext("theme", theme);
+	// STYLE CONFIG
+	// Set theme globally (options are 'light' or 'dark')
+	let theme = "light";
+	setContext("theme", theme);
 
 	function doSelect(e) {
 		let selected = e.detail;
@@ -20,7 +20,7 @@
 	}
 
 	onMount(() => {
-		const pymChild = new pym.Child({polling: 1000});
+		const pymChild = new pym.Child({ polling: 1000 });
 	});
 </script>
 
@@ -31,18 +31,25 @@
 <Section>
 	<div class="dropdown-container">
 		<label for="select">Select a local authority</label>
-    <Select id="select" idKey="areacd" labelKey="areanm" items={data.places} on:select={doSelect} placeholder="Select a local authority..."/>
+		<Select
+			id="select"
+			idKey="areacd"
+			labelKey="areanm"
+			items={data.places}
+			on:select={doSelect}
+			placeholder="Select a local authority..."
+		/>
 	</div>
 </Section>
 
 <Media col="wide" grid="narrow">
 	{#each regions as region}
-	<div class="text-small">
-		<strong>{region.nm}</strong><br/>
-		{#each data.places.filter(d => d.regioncd ? d.regioncd == region.cd : d.ctrycd == region.cd) as place}
-		<a href="{base}/{place.areacd}/">{place.areanm}</a><br/>
-		{/each}
-	</div>
+		<div class="text-small">
+			<strong>{region.nm}</strong><br />
+			{#each data.places.filter( (d) => (d.regioncd ? d.regioncd == region.cd : d.ctrycd == region.cd) ) as place}
+				<a href="{base}/{place.areacd}/">{place.areanm}</a><br />
+			{/each}
+		</div>
 	{/each}
 </Media>
 

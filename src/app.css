@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;700&display=swap');
+@import url("https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;700&display=swap");
 
 /* GLOBALS */
 
@@ -6,7 +6,8 @@
 	box-sizing: border-box;
 }
 
-html, body {
+html,
+body {
 	position: relative;
 	width: 100%;
 	height: 100%;
@@ -18,7 +19,7 @@ body {
 	margin: 0;
 	padding: 0;
 	-webkit-box-sizing: border-box;
-	        box-sizing: border-box;
+	box-sizing: border-box;
 	font-family: "Open Sans", "Helvetica Neue", "Arial", sans-serif;
 	font-size: 21px;
 	line-height: 1.5;
@@ -39,14 +40,17 @@ label {
 	display: block;
 }
 
-input, button, select, textarea {
+input,
+button,
+select,
+textarea {
 	font-family: inherit;
 	font-size: inherit;
 	-webkit-padding: 0.4em 0;
 	padding: 0.4em;
 	margin: 0 0 0.5em 0;
 	-webkit-box-sizing: border-box;
-	        box-sizing: border-box;
+	box-sizing: border-box;
 	border: 1px solid #ccc;
 	border-radius: 2px;
 }
@@ -73,13 +77,18 @@ button:focus {
 	border-color: #666;
 }
 
-header, section, nav, footer, figure, caption {
+header,
+section,
+nav,
+footer,
+figure,
+caption {
 	display: -webkit-box;
 	display: -ms-flexbox;
 	display: flex;
 	-webkit-box-pack: center;
-	    -ms-flex-pack: center;
-	        justify-content: center;
+	-ms-flex-pack: center;
+	justify-content: center;
 	background-position: center;
 	background-repeat: no-repeat;
 	background-size: cover;
@@ -170,11 +179,11 @@ small {
 	display: flex;
 	-webkit-box-orient: vertical;
 	-webkit-box-direction: normal;
-	    -ms-flex-direction: column;
-	        flex-direction: column;
+	-ms-flex-direction: column;
+	flex-direction: column;
 	-webkit-box-pack: center;
-	    -ms-flex-pack: center;
-	        justify-content: center;
+	-ms-flex-pack: center;
+	justify-content: center;
 }
 
 .caption {
@@ -234,7 +243,7 @@ header .text-big {
 
 .em {
 	padding: 1px 4px 1px 4px;
-/*	border-radius: 5px; */
+	/*	border-radius: 5px; */
 	font-weight: bold;
 	white-space: nowrap;
 }
@@ -261,7 +270,7 @@ svelte-scroller-background-container {
 [slot="foreground"] section > div {
 	padding: 12px;
 	position: relative;
-	background-color: rgba(255,255,255,0.8);
+	background-color: rgba(255, 255, 255, 0.8);
 }
 
 [slot="foreground"] section div p {
@@ -294,7 +303,7 @@ svelte-scroller-background-container {
 	}
 	.splitscreen [slot="foreground"] .col-medium {
 		width: 100%;
-		margin: 0;	
+		margin: 0;
 		padding: 0 30px;
 	}
 }
@@ -306,6 +315,6 @@ svelte-scroller-background-container {
 	margin: -1px;
 	padding: 0;
 	overflow: hidden;
-	clip: rect(0,0,0,0);
+	clip: rect(0, 0, 0, 0);
 	border: 0;
 }
