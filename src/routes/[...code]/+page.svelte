@@ -20,15 +20,20 @@
 	import { getMotion } from "$lib/utils";
 	import bbox from "@turf/bbox";
 
-	import { Hero, Highlight, Section } from "@onsvisual/svelte-components";
-	// The list of areas at the end still uses the old Section (until it moves to svelte-components)
-	import LegacySection from "$lib/layout/Section.svelte";
-	import Media from "$lib/layout/Media.svelte";
-	import Scroller from "$lib/layout/Scroller.svelte";
-	import Toggle from "$lib/ui/Toggle.svelte";
-	import Arrow from "$lib/ui/Arrow.svelte";
-	import Icon from "$lib/ui/Icon.svelte";
-	import Select from "$lib/ui/Select.svelte";
+	import {
+		Hero,
+		Highlight,
+		Section,
+		Scroller,
+		ScrollerSection,
+		Select,
+		Checkbox,
+		Icon,
+		Container,
+		Details,
+		Grid,
+		GridCell
+	} from "@onsvisual/svelte-components";
 
 	// DEMO-SPECIFIC IMPORTS
 	import { goto } from "$app/navigation";
@@ -46,7 +51,6 @@
 	const threshold = 0.65;
 	// State
 	let animation = getMotion(); // Set animation preference depending on browser preference
-	let showList = false; // Show/hide list of local authorities at end of article
 
 	// DEMO-SPECIFIC CONFIG
 	// Constants
@@ -76,10 +80,10 @@
 	// FUNCTIONS (INCL. SCROLLER ACTIONS)
 
 	// Functions for chart and map on:select and on:hover events
+	// Select dispatches "change" with the chosen place, or null when it's cleared
 	function doSelect(e) {
-		let selected_new = e.detail.areacd ? e.detail.areacd : e.detail.id;
-		if (e.detail.feature) fitById(selected); // Fit map if select event comes from map
-		goto(resolve(`/${selected_new}/`), { noScroll: true, keepFocus: true });
+		if (!e.detail) return doClear();
+		goto(resolve(`/${e.detail.areacd}/`), { noScroll: true, keepFocus: true });
 	}
 	function doClear() {
 		goto(resolve("/"), { noScroll: true, keepFocus: true });
@@ -203,34 +207,28 @@
 	{#if section.type == "Header"}
 		<Hero theme="blue" title={section.title} lede={section.lede} censusLogo>
 			{@html section.content}
-			<p>
-				<Toggle mono={true} bind:checked={animation}
-					>Animation {animation ? "on" : "off"}</Toggle
-				>
-			</p>
-			<div style="margin-top: 55px;">
-				{#if section.sections}
-					<label for="intro-select">
-						{@html section.sections[0].content}
-					</label>
-				{/if}
+			<Checkbox
+				id="animate-checkbox"
+				label="Enable animation"
+				variant="ghost"
+				bind:checked={animation}
+				compact
+			/>
+			<div class="hero-select">
 				<Select
 					id="intro-select"
-					idKey="areacd"
+					label={section.label}
 					labelKey="areanm"
-					items={places}
+					options={places}
 					value={place}
-					on:select={doSelect}
+					on:change={doSelect}
 					on:clear={doClear}
 					placeholder="Select a local authority..."
-					darkMode
 				/>
 			</div>
-			<div style="margin-top: 25px; height: 80px;">
-				{#if place}
-					<Arrow color="white" {animation}>Scroll to begin</Arrow>
-				{/if}
-			</div>
+			{#if place}
+				<p class="scroll-cue">Scroll to begin <Icon type="arrow" rotation={90} /></p>
+			{/if}
 		</Hero>
 	{:else if section.type == "Filler"}
 		<Highlight id={section.id ? section.id : null} bigText>
@@ -244,7 +242,7 @@
 		<Scroller id={section.id} {threshold} splitscreen={true} on:change={runAction}>
 			<div slot="background">
 				{#if section.id == "scatter"}
-					<div class="col-full height-full">
+					<div class="scroller-background">
 						<div class="chart">
 							<ScatterChart
 								data={places}
@@ -270,7 +268,7 @@
 						</div>
 					</div>
 				{:else if section.id == "map1" || section.id == "map2"}
-					<div class="col-full height-full">
+					<div class="scroller-background">
 						<Map
 							style={mapstyle}
 							bind:map={map[section.id]}
@@ -317,41 +315,44 @@
 			</div>
 			<div slot="foreground">
 				{#each section.sections as sub}
-					<section data-id={sub.id}>
-						<div class="col-medium">
-							{@html sub.content}
-						</div>
-					</section>
+					<ScrollerSection id={sub.id}>
+						{@html sub.content}
+					</ScrollerSection>
 				{/each}
 			</div>
 		</Scroller>
 	{/if}
 {/each}
 
-<LegacySection>
-	<h2>{place ? "Other versions of this article" : "All versions of this article"}</h2>
-	<p>
-		<Icon type="arrow" rotation={showList ? 90 : 0} />
-		<button class="btn-text" on:click={() => (showList = !showList)}
-			>{showList ? "Hide" : "Show"} list of local authorities</button
-		>
-	</p>
-</LegacySection>
-
-<div class:visually-hidden={!showList}>
-	<Media col="wide" grid="narrow">
-		{#each regions as region}
-			<div class="text-small">
-				<strong>{region.nm}</strong><br />
-				{#each places.filter( (d) => (d.regioncd ? d.regioncd == region.cd : d.ctrycd == region.cd) ) as place}
-					<a href={resolve(`/${place.areacd}/`)}>{place.areanm}</a><br />
-				{/each}
-			</div>
-		{/each}
-	</Media>
-</div>
+<Container marginTop marginBottom>
+	<!-- The links are in the page even when the details are closed, so prerendering finds every area -->
+	<Details title={place ? "Other versions of this article" : "All versions of this article"}>
+		<Grid colWidth="narrow">
+			{#each regions as region}
+				<GridCell>
+					<strong>{region.nm}</strong>
+					<div style:font-size="smaller">
+						{#each places.filter( (d) => (d.regioncd ? d.regioncd == region.cd : d.ctrycd == region.cd) ) as place}
+							<a href={resolve(`/${place.areacd}/`)}>{place.areanm}</a><br />
+						{/each}
+					</div>
+				</GridCell>
+			{/each}
+		</Grid>
+	</Details>
+</Container>
 
 <style>
+	.hero-select {
+		margin-top: 32px;
+	}
+	.scroll-cue {
+		margin-top: 24px;
+	}
+	.scroller-background {
+		width: 100%;
+		height: 100vh;
+	}
 	/* Styles specific to elements within the demo */
 	:global(svelte-scroller-foreground) {
 		pointer-events: none !important;
@@ -359,8 +360,11 @@
 	:global(svelte-scroller-foreground section div) {
 		pointer-events: all !important;
 	}
+	/* The template's marks set their own colours, so drop the ONS highlighter background and underline */
 	:global(mark) {
 		background-color: lightgrey;
+		background-image: none;
+		box-shadow: none;
 		font-weight: bold;
 		padding: 0 4px;
 	}
