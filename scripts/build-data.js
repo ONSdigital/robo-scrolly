@@ -1,8 +1,14 @@
-import { readFileSync, writeFileSync, existsSync, mkdirSync } from "fs";
-import { csvParse } from "d3-dsv";
-import { MagicArray, renderJSON, autoType } from "@onsvisual/robo-utils";
+import {
+	readFileSync,
+	writeFileSync,
+	existsSync,
+	mkdirSync,
+	copyFileSync,
+	readdirSync,
+	unlinkSync
+} from "fs";
+import { MagicArray, renderJSON, csvParse } from "@onsvisual/robo-utils";
 import pug from "pug";
-import { parse } from "node-html-parser";
 import {
 	geo_types,
 	cols,
@@ -13,39 +19,45 @@ import {
 } from "./build-data.config.js";
 
 // Load data CSV
-let data_raw = readFileSync(source_dir + data_file, { encoding: "utf8", flag: "r" });
-let data = new MagicArray(...csvParse(data_raw, autoType));
+const data_raw = readFileSync(`${source_dir}/${data_file}`, { encoding: "utf8", flag: "r" });
+const data = MagicArray.from(csvParse(data_raw)); // csvParse strips any byte order mark
 
 // Create the output directories (if they don't exist)
-let dir = "./static/data/json";
+const dir = "./static/data/json";
 if (!existsSync(dir)) {
 	mkdirSync(dir, { recursive: true });
 }
 
 // Load PUG file
-let template = readFileSync(source_dir + template_file, { encoding: "utf8", flag: "r" });
+const template = readFileSync(`${source_dir}/${template_file}`, { encoding: "utf8", flag: "r" });
 
 // Process data file into array of LAs and keyed lookup of all geographies
-let places = data.filter((d) => geo_types.includes(d.areacd.slice(0, 3)));
-let lookup = {};
+const places = data.filter((d) => geo_types.includes(d.areacd.slice(0, 3)));
+const lookup = {};
 data.forEach((d) => (lookup[d.areacd] = d));
 
 // Cycle through LAs (and null for "no area selected")
+const written = new Set();
+const failed = []; // Codes of the pages with Pug errors
 [...places, null].forEach((place) => {
 	// Render the PUG template for selected place
-	const data = renderJSON(template, place, places, lookup, pug, parse);
+	const data = renderJSON(template, place, places, lookup, pug);
 
 	// Set the save path (default.json is when no area is selected)
-	const path = `./static/data/json/${place ? place.areacd : "default"}.json`;
+	const code = place ? place.areacd : "default";
+	const file = `${code}.json`;
+	if (data.error) failed.push(code);
+	const path = `${dir}/${file}`;
 
 	// Write JSON output
 	writeFileSync(path, JSON.stringify(data));
+	written.add(file);
 	console.log(`Wrote ${path}`);
 });
 
-// Generate filtered CSV (only including cols and geo_types defined in config.js file)
+// Generate filtered CSV (only including cols and geo_types defined in build-data.config.js)
 let csv_str = cols.join(",") + "\n";
-let rows = [];
+const rows = [];
 places.forEach((place) =>
 	rows.push(
 		cols
@@ -59,6 +71,36 @@ places.forEach((place) =>
 csv_str += rows.join("\n");
 
 // Write filtered CSV output
-let path = "./static/data/places.csv";
+const path = "./static/data/places.csv";
 writeFileSync(path, csv_str);
 console.log(`Wrote ${path}`);
+
+// Copy other files from source
+files_to_copy.forEach((file) => {
+	const path = `./static/data/${file}`;
+	copyFileSync(`${source_dir}/${file}`, path);
+	console.log(`Copied ${path}`);
+});
+
+// Remove JSON files for areas that are no longer in the data (eg. after boundary changes).
+// This runs last, and only if every area rendered without a Pug error (renderJSON returns errors
+// rather than throwing them), so a broken template or CSV can't delete the previous output.
+if (failed.length || places.length === 0) {
+	console.log(
+		`Kept old JSON files, as ${failed.length ? "some pages failed" : "no areas were found"}`
+	);
+} else {
+	const redundant = readdirSync(dir).filter(
+		(file) => file.endsWith(".json") && !written.has(file)
+	);
+	redundant.forEach((file) => unlinkSync(`${dir}/${file}`));
+	if (redundant.length) console.log(`Removed ${redundant.length} redundant JSON files`);
+}
+
+// Summary (the default page, for no area selected, counts as one page)
+console.log(`\nGenerated ${written.size - failed.length} of ${written.size} pages successfully`);
+if (failed.length) {
+	const more = failed.length > 5 ? `, and ${failed.length - 5} more` : "";
+	console.log(`${failed.length} failed with Pug errors: ${failed.slice(0, 5).join(", ")}${more}`);
+	process.exitCode = 1; // So that eg. `npm run build:data && npm run build` stops here
+}

@@ -1,7 +1,7 @@
 <script>
 	import "../../app.css";
 	import { onMount, setContext } from "svelte";
-	import { base } from "$app/paths";
+	import { resolve } from "$app/paths";
 	import { regions } from "$lib/config";
 	import Section from "$lib/layout/Section.svelte";
 	import Media from "$lib/layout/Media.svelte";
@@ -16,7 +16,7 @@
 
 	function doSelect(e) {
 		let selected = e.detail;
-		window.top.location.href = `${base}/${selected.areacd}/`;
+		window.top.location.href = resolve(`/${selected.areacd}/`);
 	}
 
 	onMount(() => {
@@ -47,7 +47,7 @@
 		<div class="text-small">
 			<strong>{region.nm}</strong><br />
 			{#each data.places.filter( (d) => (d.regioncd ? d.regioncd == region.cd : d.ctrycd == region.cd) ) as place}
-				<a href="{base}/{place.areacd}/">{place.areanm}</a><br />
+				<a href={resolve(`/${place.areacd}/`)}>{place.areanm}</a><br />
 			{/each}
 		</div>
 	{/each}

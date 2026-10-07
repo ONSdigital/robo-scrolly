@@ -1,6 +1,6 @@
 export const prerender = true;
 
-import { base } from "$app/paths";
+import { asset } from "$app/paths";
 import { getPlace, getBreaks, getColor } from "$lib/utils";
 import { colors } from "$lib/config";
 
@@ -11,7 +11,7 @@ export async function load({ params, parent, fetch }) {
 	// Get specific data for selected place
 	let selected = params.code.replace("/", ""); // GSS code for selected district
 	let content = await getPlace(
-		`${base}/data/json/${lookup[selected] ? selected : "default"}.json`,
+		asset(`/data/json/${lookup[selected] ? selected : "default"}.json`),
 		fetch
 	);
 	let place = lookup[selected] ? lookup[selected] : null; // Data for selected area

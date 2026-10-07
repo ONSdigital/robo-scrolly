@@ -7,7 +7,7 @@
 </script>
 
 <script>
-	import { base } from "$app/paths";
+	import { asset, resolve } from "$app/paths";
 
 	export let data;
 	let { geojson, mapbounds, places, lookup, selected, content, place, region, ctry, siblings } =
@@ -40,7 +40,7 @@
 
 	// CORE CONFIG (COLOUR THEMES)
 	let theme = getContext("theme");
-	onMount(() => setColors(themes, theme.name));
+	onMount(() => setColors(themes, theme)); // theme is the name set in +layout.svelte, eg. "light"
 
 	// CONFIG FOR SCROLLER COMPONENTS
 	// Config
@@ -51,7 +51,7 @@
 
 	// DEMO-SPECIFIC CONFIG
 	// Constants
-	const mapstyle = `${base}/data/mapstyle.json`;
+	const mapstyle = asset("/data/mapstyle.json");
 
 	// Element bindings
 	let map = { map1: null, map2: null };
@@ -80,13 +80,10 @@
 	function doSelect(e) {
 		let selected_new = e.detail.areacd ? e.detail.areacd : e.detail.id;
 		if (e.detail.feature) fitById(selected); // Fit map if select event comes from map
-		goto(`${base}/${selected_new}/`, { noScroll: true, keepFocus: true });
+		goto(resolve(`/${selected_new}/`), { noScroll: true, keepFocus: true });
 	}
 	function doClear() {
-		goto(`${base}/`, { noScroll: true, keepFocus: true });
-	}
-	function doHover(e) {
-		hovered = e.detail.id;
+		goto(resolve("/"), { noScroll: true, keepFocus: true });
 	}
 
 	// Functions for map component
@@ -148,14 +145,14 @@
 			},
 			map2_b: (id) => {
 				let areacd = [...places].sort(
-					(a, b) => b.long_term_illness_2011_pc - a.long_term_illness_2011_pc
+					(a, b) => b.unpaid_care_20_plus_2011_pc - a.unpaid_care_20_plus_2011_pc
 				)[0].areacd; // ID of place with highest rate
 				props[id].highlighted = [areacd]; // Highlight this place
 				fitById(areacd, geojson, map["map2"]); // Fit the map to this place
 			},
 			map2_c: (id) => {
 				let areacd = [...places].sort(
-					(a, b) => a.long_term_illness_2011_pc - b.long_term_illness_2011_pc
+					(a, b) => a.unpaid_care_20_plus_2011_pc - b.unpaid_care_20_plus_2011_pc
 				)[0].areacd; // ID of place with lowest rate
 				props[id].highlighted = [areacd];
 				fitById(areacd, geojson, map["map2"]);
@@ -178,17 +175,20 @@
 <svelte:head>
 	<title>{place ? `Localised article for ${place.areacd}` : "Localised article example"}</title>
 	<link rel="icon" href="https://www.ons.gov.uk/favicon.ico" />
-	<link rel="canonical" href="https://www.ons.gov.uk{base}{selected ? '/' + selected : ''}" />
+	<link
+		rel="canonical"
+		href="https://www.ons.gov.uk{resolve(selected ? `/${selected}/` : '/')}"
+	/>
 	<meta property="og:type" content="website" />
 	<meta
 		property="og:url"
-		content="https://www.ons.gov.uk{base}{selected ? '/' + selected : ''}"
+		content="https://www.ons.gov.uk{resolve(selected ? `/${selected}/` : '/')}"
 	/>
 	<meta
 		property="og:title"
 		content={place ? `Localised article for ${place.areacd}` : "Localised article example"}
 	/>
-	<meta property="og:image" content="https://www.ons.gov.uk{base}/img/og.png" />
+	<meta property="og:image" content="https://www.ons.gov.uk{asset('/img/og.png')}" />
 	<meta property="og:image:type" content="image/png" />
 	<meta property="og:description" content="This is a description of the page." />
 	<meta name="description" content="This is a description of the page." />
@@ -345,7 +345,7 @@
 			<div class="text-small">
 				<strong>{region.nm}</strong><br />
 				{#each places.filter( (d) => (d.regioncd ? d.regioncd == region.cd : d.ctrycd == region.cd) ) as place}
-					<a href="{base}/{place.areacd}/">{place.areanm}</a><br />
+					<a href={resolve(`/${place.areacd}/`)}>{place.areanm}</a><br />
 				{/each}
 			</div>
 		{/each}

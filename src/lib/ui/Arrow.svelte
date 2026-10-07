@@ -1,5 +1,5 @@
 <script>
-	import { assets } from "$app/paths";
+	import { asset } from "$app/paths";
 	export let color = "black";
 	export let animation = true;
 	export let center = true;
@@ -12,7 +12,7 @@
 {#if center}
 	<slot></slot><br />
 	<img
-		src="{assets}/img/scroll-down-{color}.svg"
+		src={asset(`/img/scroll-down-${color}.svg`)}
 		class="arrow"
 		class:bounce={animation}
 		alt=""
@@ -20,7 +20,7 @@
 	/>
 {:else}
 	<img
-		src="{assets}/img/scroll-down-{color}.svg"
+		src={asset(`/img/scroll-down-${color}.svg`)}
 		class="arrow left"
 		class:bounce={animation}
 		alt=""
