@@ -1,7 +1,12 @@
 /** @type {import('@sveltejs/kit').Config} */
 import adapter from "@sveltejs/adapter-static";
+import { base_preview, base_prod } from "./src/app.config.js";
 
+const preview = process.env.PUBLIC_APP_ENV === "preview";
 const production = process.env.NODE_ENV === "production";
+// With no base path, use relative URLs so the build can be deployed to any path (see src/app.config.js)
+const base = (preview ? base_preview : production ? base_prod : "") || "";
+const relative = !base;
 
 const config = {
 	kit: {
@@ -17,10 +22,8 @@ const config = {
 			handleMissingId: "warn"
 		},
 		paths: {
-			base: production ? "/robo-scrolly" : "",
-			// Absolute paths, as in SvelteKit 1, because the page builds absolute ons.gov.uk URLs
-			// (canonical and og:url tags)
-			relative: false
+			base,
+			relative
 		}
 	}
 };

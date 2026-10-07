@@ -11,9 +11,10 @@ The UI comes from `@onsvisual/svelte-components` (there are no local components;
 ## Commands
 
 ```bash
-npm run build:data      # render demo-data/ into static/data/ (see scripts/build-data.config.js)
+npm run build:data      # render demo-data/ (or the source in src/app.config.js) into static/data/
 npm run dev             # dev server at localhost:5173
 npm run build           # production build to build/, then js-fix
+npm run build:preview   # build with base_preview
 npm run lint            # prettier --check
 npm run format          # prettier --write
 ```
@@ -24,7 +25,7 @@ Formatting (`.prettierrc`): tabs (width 4), print width 100, no trailing commas,
 
 ## Architecture
 
-**Data build (Node, `scripts/build-data.js`).** Reads the CSV and Pug template named in `scripts/build-data.config.js`, keeps rows whose code prefix is in `geo_types`, and for each area (plus `null`, meaning no area selected) calls robo-utils' `renderJSON`. It writes `static/data/json/<areacd>.json` (and `default.json`), plus `static/data/places.csv` with only the `cols` columns, which every page loads for the charts, maps and area list (so any column a chart or map uses must be in `cols`). After a run where every page rendered without a Pug error, it deletes JSON files for areas that are no longer in the data; it prints a summary and exits with code 1 if any page failed. The demo data is from the 2001 and 2011 censuses (disability and unpaid care).
+**Data build (Node, `scripts/build-data.js`).** Reads the CSV and Pug template named in `src/app.config.js`, keeps rows whose code prefix is in `filter` (all rows if it's empty), and for each area (plus `null`, meaning no area selected) calls robo-utils' `renderJSON`. It writes `static/data/json/<areacd>.json` (and `default.json`), plus `static/data/places.csv` with only the `cols` columns, which every page loads for the charts, maps and area list (so any column a chart or map uses must be in `cols`). After a run where every page rendered without a Pug error, it deletes JSON files for areas that are no longer in the data; it prints a summary and exits with code 1 if any page failed. The demo data is from the 2001 and 2011 censuses (disability and unpaid care).
 
 **Routes.**
 
@@ -36,4 +37,4 @@ Formatting (`.prettierrc`): tabs (width 4), print width 100, no trailing commas,
 
 **Charts and maps.** `ScatterChart` comes from `@onsvisual/svelte-charts` (0.4), which ships LayerCake as `.svelte` files, so `vite.config.js` bundles `layercake` for SSR. Maps use `@onsvisual/svelte-maps` (2.x, MapLibre 6), with the base style in `static/data/mapstyle.json`; `+page.svelte` points MapLibre at its bundled worker script in a `<script module>` block, which svelte-maps 2 requires. When testing in a browser, keep the tab visible and scroll with real scroll events (eg. the mouse wheel): MapLibre doesn't render, and svelte-maps doesn't add its layers, in a hidden tab, and the svelte-components `Scroller` only re-measures on scroll events, so jumping to a step with `scrollIntoView()` can leave its background unpinned.
 
-**Base paths.** `paths.base` is `/robo-scrolly` in production and empty in dev, and paths are absolute (`relative: false`) because the page builds absolute `https://www.ons.gov.uk/...` URLs for its canonical and `og:` tags. Use `asset()` for files in `static/` and `resolve()` for routes, from `$app/paths` (not the deprecated `base`/`assets`). `scripts/js-fix.js` prepends `//js` to every JS file in `build/_app` to avoid MIME type errors on the ONS servers.
+**Base paths.** `base_prod` and `base_preview` in `src/app.config.js` set `paths.base`, the same way as robo-article and robo-embed: a path builds absolute URLs, and `null` builds relative ones so the app can be deployed to any path. robo-scrolly needs a path, because the page builds absolute `https://www.ons.gov.uk/...` URLs for its canonical and `og:` tags, and `resolve()`/`asset()` return relative paths (eg. `../`) in a relative build. In dev there's no base. Use `asset()` for files in `static/` and `resolve()` for routes, from `$app/paths` (not the deprecated `base`/`assets`). `scripts/js-fix.js` prepends `//js` to every JS file in `build/_app` to avoid MIME type errors on the ONS servers.

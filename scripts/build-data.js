@@ -10,13 +10,13 @@ import {
 import { MagicArray, renderJSON, csvParse } from "@onsvisual/robo-utils";
 import pug from "pug";
 import {
-	geo_types,
+	filter,
 	cols,
 	source_dir,
 	data_file,
 	template_file,
 	files_to_copy
-} from "./build-data.config.js";
+} from "../src/app.config.js";
 
 // Load data CSV
 const data_raw = readFileSync(`${source_dir}/${data_file}`, { encoding: "utf8", flag: "r" });
@@ -32,7 +32,10 @@ if (!existsSync(dir)) {
 const template = readFileSync(`${source_dir}/${template_file}`, { encoding: "utf8", flag: "r" });
 
 // Process data file into array of LAs and keyed lookup of all geographies
-const places = data.filter((d) => geo_types.includes(d.areacd.slice(0, 3)));
+const places =
+	Array.isArray(filter) && filter.length > 0
+		? data.filter((d) => filter.includes(d.areacd.slice(0, 3)))
+		: data;
 const lookup = {};
 data.forEach((d) => (lookup[d.areacd] = d));
 
@@ -55,7 +58,7 @@ const failed = []; // Codes of the pages with Pug errors
 	console.log(`Wrote ${path}`);
 });
 
-// Generate filtered CSV (only including cols and geo_types defined in build-data.config.js)
+// Generate filtered CSV (only including cols and filter defined in app.config.js)
 let csv_str = cols.join(",") + "\n";
 const rows = [];
 places.forEach((place) =>

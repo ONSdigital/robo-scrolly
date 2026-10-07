@@ -5,6 +5,7 @@
 	"scripts": {
 		"dev": "vite dev",
 		"build": "vite build && node ./scripts/js-fix",
+		"build:preview": "cross-env PUBLIC_APP_ENV=preview vite build",
 		"build:data": "node ./scripts/build-data",
 		"package": "vite package",
 		"preview": "vite preview",
@@ -24,6 +25,7 @@
 		"@sveltejs/vite-plugin-svelte": "^6.2.4",
 		"@turf/bbox": "^6.5.0",
 		"ckmeans": "^2.1.0",
+		"cross-env": "^7.0.3",
 		"d3-dsv": "latest",
 		"d3-format": "^3.1.0",
 		"gh-pages": "6.1.1",
