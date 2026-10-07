@@ -20,12 +20,11 @@
 	import { getMotion } from "$lib/utils";
 	import bbox from "@turf/bbox";
 
-	import Header from "$lib/layout/Header.svelte";
-	import Section from "$lib/layout/Section.svelte";
+	import { Hero, Highlight, Section } from "@onsvisual/svelte-components";
+	// The list of areas at the end still uses the old Section (until it moves to svelte-components)
+	import LegacySection from "$lib/layout/Section.svelte";
 	import Media from "$lib/layout/Media.svelte";
 	import Scroller from "$lib/layout/Scroller.svelte";
-	import Filler from "$lib/layout/Filler.svelte";
-	// import Divider from "$lib/layout/Divider.svelte";
 	import Toggle from "$lib/ui/Toggle.svelte";
 	import Arrow from "$lib/ui/Arrow.svelte";
 	import Icon from "$lib/ui/Icon.svelte";
@@ -202,7 +201,7 @@
 
 {#each content.sections as section}
 	{#if section.type == "Header"}
-		<Header theme="dark" bgcolor="#206095" bgfixed={true} center={false} short={true}>
+		<Hero theme="blue" title={section.title} lede={section.lede} censusLogo>
 			{@html section.content}
 			<p>
 				<Toggle mono={true} bind:checked={animation}
@@ -232,13 +231,13 @@
 					<Arrow color="white" {animation}>Scroll to begin</Arrow>
 				{/if}
 			</div>
-		</Header>
+		</Hero>
 	{:else if section.type == "Filler"}
-		<Filler id={section.id ? section.id : null} theme="lightblue" wide={true} center={false}>
+		<Highlight id={section.id ? section.id : null} bigText>
 			{@html section.content}
-		</Filler>
+		</Highlight>
 	{:else if section.type == "Section"}
-		<Section id={section.id ? section.id : null}>
+		<Section id={section.id ? section.id : null} title={section.title}>
 			{@html section.content}
 		</Section>
 	{:else if section.type == "Scroller"}
@@ -329,7 +328,7 @@
 	{/if}
 {/each}
 
-<Section>
+<LegacySection>
 	<h2>{place ? "Other versions of this article" : "All versions of this article"}</h2>
 	<p>
 		<Icon type="arrow" rotation={showList ? 90 : 0} />
@@ -337,7 +336,7 @@
 			>{showList ? "Hide" : "Show"} list of local authorities</button
 		>
 	</p>
-</Section>
+</LegacySection>
 
 <div class:visually-hidden={!showList}>
 	<Media col="wide" grid="narrow">

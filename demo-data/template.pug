@@ -1,8 +1,8 @@
 // Version information. YYYY-MM-DD
 
 section#top.Header
-    h1 Disability and unpaid care in #{place ? place.areanm : 'your area'}
-    p.text-big How many people are limited by a disability or long-term health problem?
+    prop.title Disability and unpaid care in #{place ? place.areanm : 'your area'}
+    prop.lede How many people are limited by a disability or long-term health problem?
     p DD MMM YYYY
     section#top-select
         p Select a local authority area for a personalised look at health, disability and unpaid care
@@ -19,11 +19,11 @@ section#top.Header
 
 if place
     section#intro.Filler
-        p.text-big There are #{ew.long_term_illness_2011.approx()} people in England and Wales whose day-to-day activities are limited by a long-term health problem or disability, while #{ew.unpaid_care_20_plus_2011.approx()} people are providing at least 20 hours a week of unpaid care for someone else.
-        p.text-big This article uses data from the 2011 Census to show how the numbers vary from area to area.
+        p There are #{ew.long_term_illness_2011.approx()} people in England and Wales whose day-to-day activities are limited by a long-term health problem or disability, while #{ew.unpaid_care_20_plus_2011.approx()} people are providing at least 20 hours a week of unpaid care for someone else.
+        p This article uses data from the 2011 Census to show how the numbers vary from area to area.
     
     section#section1.Section
-        h2 How #{place.areanm} compares on long-term health problems and disability
+        prop.title How #{place.areanm} compares on long-term health problems and disability
         p In 2011, around #{eng.long_term_illness_2011_pc.format(".0f")}% of the population of England and #{wales.long_term_illness_2011_pc.format(".0f")}% of people in Wales were limited, either a little or a lot, in their day-to-day activities because of a long-term health problem or disability.
     
     section#scatter.Scroller
@@ -38,10 +38,10 @@ if place
             p And this is how the percentage for #{place.areanm} compares to all of the local authorities in #{groupArea.getName("the")}, where it had #{group.getRank(place, "limited_lot_2011_pc").describe()} percentage.
     
     section#filler1.Filler
-        p.text-big In England, #{eng.limited_lot_2011.approx()} people (#{eng.limited_lot_2011_pc}%) were limited a lot while in Wales it was #{wales.limited_lot_2011.approx()} people (#{wales.limited_lot_2011_pc}%).
+        p In England, #{eng.limited_lot_2011.approx()} people (#{eng.limited_lot_2011_pc}%) were limited a lot while in Wales it was #{wales.limited_lot_2011.approx()} people (#{wales.limited_lot_2011_pc}%).
     
     section#section2.Section
-        h2 Disability and long-term health problems are most prevalent in Wales and the north of England
+        prop.title Disability and long-term health problems are most prevalent in Wales and the north of England
         p The highest percentages of people with a disability or health problem that limited them a lot in their day-to-day lives were recorded in parts of Wales and the north of England.
     
     mixin highest_disability(place)
@@ -61,7 +61,7 @@ if place
             +lowest_disability(places.bottom("long_term_illness_2011_pc"))
         
     section#section3.Section
-        h2 #{capitalise(toFraction(ew.unpaid_care_20_plus_2011_pc / 100))} people are caring for someone unpaid for at least 20 hours a week
+        prop.title #{capitalise(toFraction(ew.unpaid_care_20_plus_2011_pc / 100))} people are caring for someone unpaid for at least 20 hours a week
         p In the 2011 Census, data showed that #{place.unpaid_care_20_plus_2011.approx()} people (#{place.unpaid_care_20_plus_2011_pc.format(",.2r")}%) were caring for someone else for at least 20 hours a week in #{place.areanm}.
         p This compares with #{place.unpaid_care_20_plus_2001.approx()} (#{place.unpaid_care_20_plus_2001_pc.format(",.2r")}%) in 2001.
         p Across England in 2011, #{eng.unpaid_care_20_plus_2011.approx()} people, #{eng.unpaid_care_20_plus_2011_pc}% of the population, provided at least 20 hours a week of unpaid care to someone else. This is #{eng.unpaid_care_20_plus_2011_pc.compareTo(eng.unpaid_care_20_plus_2001_pc, upDown)} #{eng.unpaid_care_20_plus_2001_pc}% in 2001.

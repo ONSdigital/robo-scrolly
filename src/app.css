@@ -77,10 +77,11 @@ button:focus {
 	border-color: #666;
 }
 
-/* The old layout components (Header, Section, Filler...) rely on these. svelte-components' Header
-   and Footer don't, so they're left out until the old components are replaced */
+/* The old layout components (Header, Section, Filler...) rely on these. svelte-components' header,
+   footer and sections (which have ons- classes) don't, so they're left out until the old components
+   are replaced */
 header:not(.ons-header),
-section,
+section:not([class*="ons-"]),
 figure,
 caption {
 	display: -webkit-box;
