@@ -77,10 +77,10 @@ button:focus {
 	border-color: #666;
 }
 
-header,
+/* The old layout components (Header, Section, Filler...) rely on these. svelte-components' Header
+   and Footer don't, so they're left out until the old components are replaced */
+header:not(.ons-header),
 section,
-nav,
-footer,
 figure,
 caption {
 	display: -webkit-box;
@@ -94,10 +94,6 @@ caption {
 	background-size: cover;
 	margin: 0;
 	padding: 0;
-}
-
-footer {
-	margin: 60px 0 0 0;
 }
 
 h1 {

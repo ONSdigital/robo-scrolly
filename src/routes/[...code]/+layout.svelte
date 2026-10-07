@@ -1,30 +1,23 @@
 <script>
+	import "@onsvisual/svelte-components/css/main.css";
 	import "../../app.css";
 	import { page } from "$app/stores";
 	import { setContext } from "svelte";
+	import { AnalyticsBanner, Header, Main, Footer } from "@onsvisual/svelte-components";
 	import { analyticsId, analyticsProps } from "$lib/config";
-	import AnalyticsBanner from "$lib/layout/AnalyticsBanner.svelte";
-	import ONSHeader from "$lib/layout/ONSHeader.svelte";
-	import ONSFooter from "$lib/layout/ONSFooter.svelte";
-	//import Warning from "$lib/ui/Warning.svelte";
 
-	// STYLE CONFIG
-	// Set theme globally (options are 'light' or 'dark')
-	let theme = "light";
-	setContext("theme", theme);
+	let { children } = $props();
 
-	// GOOGLE ANALYTICS
-	// Settings for page analytics. Values must be shared with <AnalyticsBanner> component
-	// 'analyticsId' and 'analyticsProps' are defined in config.js
-	let gtag;
+	// Theme name, read by +page.svelte (options are "light" or "dark")
+	setContext("theme", "light");
 </script>
 
-<!-- <Warning/> -->
-<AnalyticsBanner {analyticsId} {analyticsProps} {page} bind:gtag />
-<ONSHeader {theme} census />
+<!-- 'analyticsId' and 'analyticsProps' are defined in config.js -->
+<AnalyticsBanner {analyticsId} {analyticsProps} {page} />
+<Header />
 
-<main>
-	<slot {theme} {gtag} />
-</main>
+<Main>
+	{@render children?.()}
+</Main>
 
-<ONSFooter {theme} />
+<Footer />
