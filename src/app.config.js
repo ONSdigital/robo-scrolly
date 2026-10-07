@@ -9,7 +9,7 @@ export const base_preview = "/robo-scrolly"; // Directory on datavisweb preview 
 // Public address of the app, with no trailing slash. This is only used where the app needs a full,
 // absolute URL (the canonical link and share tags). It doesn't affect the build or the paths the app
 // uses, which are set by base_prod and base_preview above.
-export const app_url = "https://www.ons.gov.uk/robo-scrolly";
+export const app_url = "https://onsdigital.github.io/robo-scrolly";
 
 // BUILD DATA CONFIG
 
