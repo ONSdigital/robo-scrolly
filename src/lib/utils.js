@@ -3,12 +3,6 @@ import { feature } from "topojson-client";
 import ckmeans from "ckmeans";
 
 // CORE FUNCTIONS
-export function setColors(themes, theme) {
-	for (let color in themes[theme]) {
-		document.documentElement.style.setProperty("--" + color, themes[theme][color]);
-	}
-}
-
 export function getMotion() {
 	let mediaQuery = true; // window.matchMedia("(prefers-reduced-motion: reduce)"); // Check if browser prefers reduced motion
 	return !mediaQuery || mediaQuery.matches ? false : true; // return true for motion, false for no motion
@@ -54,62 +48,4 @@ export function getBreaks(vals) {
 	let breaks = ckmeans(vals, 5);
 	breaks.push(vals[vals.length - 1]);
 	return breaks;
-}
-
-export function makeDatasets(data, colors, geo) {
-	let metadata = {};
-	let dataset = {};
-
-	let meta = data.map((d) => ({
-		code: d.code,
-		name: d.name,
-		parent: d.parent ? d.parent : null
-	}));
-	meta.sort((a, b) => a.name.localeCompare(b.name));
-
-	let lookup = {};
-	meta.forEach((d) => {
-		lookup[d.code] = d;
-	});
-	metadata.array = meta;
-	metadata.lookup = lookup;
-
-	let indicators = data.map((d, i) => ({
-		...meta[i],
-		area: d.area,
-		pop: d["2020"],
-		density: d.density,
-		age_med: d.age_med
-	}));
-
-	if (geo == "district") {
-		["density", "age_med"].forEach((key) => {
-			let values = indicators.map((d) => d[key]).sort((a, b) => a - b);
-			let breaks = getBreaks(values);
-			indicators.forEach(
-				(d, i) => (indicators[i][key + "_color"] = getColor(d[key], breaks, colors.seq))
-			);
-		});
-	}
-	dataset.indicators = indicators;
-
-	let years = [
-		2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010, 2011, 2012, 2013, 2014, 2015,
-		2016, 2017, 2018, 2019, 2020
-	];
-
-	let timeseries = [];
-	data.forEach((d) => {
-		years.forEach((year) => {
-			timeseries.push({
-				code: d.code,
-				name: d.name,
-				value: d[year],
-				year
-			});
-		});
-	});
-	dataset.timeseries = timeseries;
-
-	return { dataset, metadata };
 }

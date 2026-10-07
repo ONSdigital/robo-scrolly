@@ -21,7 +21,7 @@
 </script>
 
 <Embed>
-	<Highlight height="auto" marginTop={false} marginBottom={false}>
+	<Highlight cls="embed-select" height="auto" marginTop={false} marginBottom={false}>
 		<Select
 			id="select"
 			label="Select a local authority"
@@ -51,3 +51,10 @@
 		</Details>
 	</Container>
 </Embed>
+
+<style>
+	/* Highlight lays out its content with flexbox, so let the select fill the width */
+	:global(.embed-select .ons-section__highlight > div) {
+		flex-grow: 1;
+	}
+</style>

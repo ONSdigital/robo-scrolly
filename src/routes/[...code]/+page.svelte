@@ -9,14 +9,10 @@
 <script>
 	import { asset, resolve } from "$app/paths";
 
-	export let data;
-	let { geojson, mapbounds, places, lookup, selected, content, place, region, ctry, siblings } =
-		data;
-	$: ({ geojson, mapbounds, places, lookup, selected, content, place, region, ctry, siblings } =
-		data);
+	let { data } = $props();
+	let { geojson, mapbounds, places, selected, content, place, siblings } = $derived(data);
 
 	// CORE IMPORTS
-	import { getContext, onMount } from "svelte";
 	import { getMotion } from "$lib/utils";
 	import bbox from "@turf/bbox";
 
@@ -37,31 +33,26 @@
 
 	// DEMO-SPECIFIC IMPORTS
 	import { goto } from "$app/navigation";
-	import { setColors } from "$lib/utils";
-	import { units, themes, regions } from "$lib/config";
-	import { ScatterChart, LineChart, BarChart } from "@onsvisual/svelte-charts";
-	import { Map, MapSource, MapLayer, MapTooltip } from "@onsvisual/svelte-maps";
-
-	// CORE CONFIG (COLOUR THEMES)
-	let theme = getContext("theme");
-	onMount(() => setColors(themes, theme)); // theme is the name set in +layout.svelte, eg. "light"
+	import { regions } from "$lib/config";
+	import { ScatterChart } from "@onsvisual/svelte-charts";
+	import { Map, MapSource, MapLayer } from "@onsvisual/svelte-maps";
 
 	// CONFIG FOR SCROLLER COMPONENTS
 	// Config
 	const threshold = 0.65;
 	// State
-	let animation = getMotion(); // Set animation preference depending on browser preference
+	let animation = $state(getMotion()); // Set animation preference depending on browser preference
 
 	// DEMO-SPECIFIC CONFIG
 	// Constants
 	const mapstyle = asset("/data/mapstyle.json");
 
 	// Element bindings
-	let map = { map1: null, map2: null };
+	let map = $state({ map1: null, map2: null });
 
 	// State
 	// Props for interactive charts/maps
-	let props = {
+	let props = $state({
 		scatter: {
 			xKey: "long_term_illness_2011_pc",
 			yKey: null,
@@ -75,7 +66,7 @@
 			colorKey: "unpaid_care_20_plus_2011_pc_color",
 			highlighted: []
 		}
-	};
+	});
 
 	// FUNCTIONS (INCL. SCROLLER ACTIONS)
 
@@ -90,13 +81,13 @@
 	}
 
 	// Functions for map component
-	export function fitBounds(bounds, map) {
+	function fitBounds(bounds, map) {
 		if (map) {
 			map.fitBounds(bounds, { animate: animation, padding: 50 });
 		}
 	}
 
-	export function fitById(id, geojson, map) {
+	function fitById(id, geojson, map) {
 		if (geojson && id) {
 			let feature = geojson.features.find((d) => d.properties.AREACD == id);
 			let bounds = bbox(feature.geometry);
@@ -368,28 +359,8 @@
 		font-weight: bold;
 		padding: 0 4px;
 	}
-	button {
-		cursor: pointer;
-	}
 	.chart {
 		margin-top: 45px;
 		width: calc(100% - 5px);
-	}
-	.chart-full {
-		margin: 0 20px;
-	}
-	.chart-sml {
-		font-size: 0.85em;
-	}
-	.btn-text {
-		border: none;
-		background: none;
-		margin: 0;
-		padding: 0;
-		text-decoration: underline;
-		color: #206095;
-	}
-	.btn-text:hover {
-		color: black;
 	}
 </style>
