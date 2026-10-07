@@ -2,10 +2,14 @@
 
 // Base paths
 // A path builds the app for that directory, with absolute URLs. null builds it with relative URLs,
-// so it can be deployed to any path. robo-scrolly builds absolute ons.gov.uk URLs (its canonical and
-// og: tags), so it needs a path.
-export const base_prod = "/robo-scrolly"; // Directory on the ONS website
+// so it can be deployed to any path.
+export const base_prod = null; // Directory on the ONS website
 export const base_preview = "/robo-scrolly"; // Directory on datavisweb preview server or Github Pages
+
+// Public address of the app, with no trailing slash. This is only used where the app needs a full,
+// absolute URL (the canonical link and share tags). It doesn't affect the build or the paths the app
+// uses, which are set by base_prod and base_preview above.
+export const app_url = "https://www.ons.gov.uk/robo-scrolly";
 
 // BUILD DATA CONFIG
 

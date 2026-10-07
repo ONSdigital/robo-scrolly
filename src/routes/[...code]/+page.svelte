@@ -34,6 +34,7 @@
 	// DEMO-SPECIFIC IMPORTS
 	import { goto } from "$app/navigation";
 	import { regions } from "$lib/config";
+	import { app_url } from "../../app.config.js";
 	import { ScatterChart } from "@onsvisual/svelte-charts";
 	import { Map, MapSource, MapLayer } from "@onsvisual/svelte-maps";
 
@@ -169,20 +170,14 @@
 <svelte:head>
 	<title>{place ? `Localised article for ${place.areacd}` : "Localised article example"}</title>
 	<link rel="icon" href="https://www.ons.gov.uk/favicon.ico" />
-	<link
-		rel="canonical"
-		href="https://www.ons.gov.uk{resolve(selected ? `/${selected}/` : '/')}"
-	/>
+	<link rel="canonical" href="{app_url}/{selected ? `${selected}/` : ''}" />
 	<meta property="og:type" content="website" />
-	<meta
-		property="og:url"
-		content="https://www.ons.gov.uk{resolve(selected ? `/${selected}/` : '/')}"
-	/>
+	<meta property="og:url" content="{app_url}/{selected ? `${selected}/` : ''}" />
 	<meta
 		property="og:title"
 		content={place ? `Localised article for ${place.areacd}` : "Localised article example"}
 	/>
-	<meta property="og:image" content="https://www.ons.gov.uk{asset('/img/og.png')}" />
+	<meta property="og:image" content="{app_url}/img/og.png" />
 	<meta property="og:image:type" content="image/png" />
 	<meta property="og:description" content="This is a description of the page." />
 	<meta name="description" content="This is a description of the page." />
