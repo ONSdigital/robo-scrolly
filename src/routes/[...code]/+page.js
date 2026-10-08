@@ -12,6 +12,8 @@ export async function load({ params, parent, fetch }) {
 		asset(`/data/json/${lookup[selected] ? selected : "default"}.json`),
 		fetch
 	);
+	const meta = content.sections.find((s) => s.type === "Meta"); // Page metadata and analytics props
+	content.sections = content.sections.filter((s) => s.type !== "Meta");
 	let place = lookup[selected] ? lookup[selected] : null; // Data for selected area
 	if (!place) selected = null;
 	let region = place && place.regioncd ? place.regioncd : null; // Region GSS code for selected area
@@ -33,5 +35,17 @@ export async function load({ params, parent, fetch }) {
 		places.forEach((d) => (d[key + "_color"] = getColor(d[key], breaks, colors.seq)));
 	}
 
-	return { geojson, mapbounds, places, lookup, selected, content, place, region, ctry, siblings };
+	return {
+		geojson,
+		mapbounds,
+		places,
+		lookup,
+		selected,
+		content,
+		meta,
+		place,
+		region,
+		ctry,
+		siblings
+	};
 }

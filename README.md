@@ -92,7 +92,7 @@ The app is built with [SvelteKit](https://svelte.dev/docs/kit) and [Svelte 5](ht
 
 The best place to start is **/src/routes/[...code]/+page.svelte**, which shows each section and sets up the scrollers' charts and maps.
 
-As well as the article (**/** and **/[area code]/**), **/embed/** is an area picker to embed in another page, which opens the article for the chosen area.
+As well as the article (**/** and **/[area code]/**), **/landing/** is an area picker to embed in another page, which opens the article for the chosen area.
 
 ## Building the app
 

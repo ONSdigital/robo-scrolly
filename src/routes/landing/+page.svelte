@@ -5,6 +5,7 @@
 	import { regions } from "$lib/config";
 	import {
 		Embed,
+		AnalyticsBanner,
 		Highlight,
 		Select,
 		Container,
@@ -15,12 +16,30 @@
 
 	let { data } = $props();
 
+	const analyticsProps = (() => {
+		const props = {};
+		for (const key of ["contentTitle", "releaseDate", "outputSeries", "contentType"]) {
+			if (data?.meta?.[key])
+				props[key] =
+					key === "releaseDate" ? data.meta[key].replaceAll("-", "") : data.meta[key];
+		}
+		return props;
+	})();
+
 	function doSelect(e) {
 		if (e.detail) window.top.location.href = resolve(`/${e.detail.areacd}/`);
 	}
 </script>
 
+<svelte:head>
+	<title>{data?.meta?.title || ""}</title>
+	<meta name="description" content={data?.meta?.description || ""} />
+	<meta name="robots" content="noindex" />
+	<meta name="googlebot" content="indexifembedded" />
+</svelte:head>
+
 <Embed>
+	<AnalyticsBanner {analyticsProps} hideBanner />
 	<Highlight cls="embed-select" height="auto" marginTop={false} marginBottom={false}>
 		<Select
 			id="select"

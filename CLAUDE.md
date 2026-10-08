@@ -30,8 +30,8 @@ Formatting (`.prettierrc`): tabs (width 4), print width 100, no trailing commas,
 **Routes.**
 
 - `[...code]`: the article, for `/` (no area selected) and `/<areacd>/`. `+layout.js` loads the map boundaries (`static/data/geo_lad2015.json`, a TopoJSON with layer `LAD15merc`) and `places.csv` once; `+page.js` loads the area's JSON and works out map colour breaks. Selecting an area calls `goto()` with `noScroll`, so the reader stays where they are.
-- `embed`: an embeddable area picker that navigates `window.top` to the article.
-- `src/routes/+layout.js` sets `trailingSlash = "always"`, and turns prerendering on (except in preview builds). `svelte.config.js` prerenders `/` and `/embed/`, and the crawler finds every area page through the list of areas at the end of the article (in a `Details`, whose links stay in the page when it's closed).
+- `landing`: an embeddable area picker that navigates `window.top` to the article.
+- `src/routes/+layout.js` sets `trailingSlash = "always"`, and turns prerendering on (except in preview builds). `svelte.config.js` prerenders `/` and `/landing/`, and the crawler finds every area page through the list of areas at the end of the article (in a `Details`, whose links stay in the page when it's closed).
 
 **Section types and scrollers.** The rendered JSON is `{ sections, ... }`, where each top-level Pug `section` has its class as `type`. `[...code]/+page.svelte` switches on it: `Header` becomes a `Hero` (from `prop.title`, `prop.lede` and `prop.label`, the area select's label, plus any HTML, followed by the animation checkbox and area select), `Filler` a `Highlight`, `Section` a `Section` (with `prop.title` as its heading), and `Scroller` a `Scroller`. A `Scroller` section's nested sections are its steps (`ScrollerSection`s); the chart or map in its background is chosen in `+page.svelte` by the scroller's `id` (`scatter`, `map1`, `map2`), and each step runs the function in `actions[scrollerId][stepId]` (eg. `actions.map1.map1_b`) when it scrolls into view. So adding or renaming a scroller or step in the template needs a matching change in `+page.svelte`.
 

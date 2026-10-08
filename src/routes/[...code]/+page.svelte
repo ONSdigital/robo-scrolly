@@ -173,19 +173,20 @@
 </script>
 
 <svelte:head>
-	<title>{place ? `Localised article for ${place.areacd}` : "Localised article example"}</title>
+	<title>{data?.meta?.title || ""}</title>
 	<link rel="icon" href="https://www.ons.gov.uk/favicon.ico" />
 	<link rel="canonical" href="{app_url}/{selected ? `${selected}/` : ''}" />
+	<meta property="og:title" content={data?.meta?.title || ""} />
 	<meta property="og:type" content="website" />
 	<meta property="og:url" content="{app_url}/{selected ? `${selected}/` : ''}" />
+	<meta property="og:image" content="{app_url}/{data?.meta?.image || 'img/og.png'}" />
 	<meta
-		property="og:title"
-		content={place ? `Localised article for ${place.areacd}` : "Localised article example"}
+		property="og:image:type"
+		content="image/{data?.meta?.image ? data.meta.image.split('.').slice(-1)[0] : 'png'}"
 	/>
-	<meta property="og:image" content="{app_url}/img/og.png" />
-	<meta property="og:image:type" content="image/png" />
-	<meta property="og:description" content="This is a description of the page." />
-	<meta name="description" content="This is a description of the page." />
+	<meta name="twitter:card" content="summary_large_image" />
+	<meta property="og:description" content={data?.meta?.description || ""} />
+	<meta name="description" content={data?.meta?.description || ""} />
 </svelte:head>
 
 {#if Array.isArray(content.notes)}

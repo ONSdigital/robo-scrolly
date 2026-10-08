@@ -3,13 +3,23 @@
 	import "../../app.css";
 	import { page } from "$app/stores";
 	import { AnalyticsBanner, Header, Main, Footer } from "@onsvisual/svelte-components";
-	import { analyticsId, analyticsProps } from "$lib/config";
 
 	let { children } = $props();
+
+	// Analytics props from the template's Meta section, which +page.js returns as data.meta
+	let data = $derived($page.data);
+	let analyticsProps = $derived.by(() => {
+		const props = {};
+		for (const key of ["contentTitle", "releaseDate", "outputSeries", "contentType"]) {
+			if (data?.meta?.[key])
+				props[key] =
+					key === "releaseDate" ? data.meta[key].replaceAll("-", "") : data.meta[key];
+		}
+		return props;
+	});
 </script>
 
-<!-- 'analyticsId' and 'analyticsProps' are defined in config.js -->
-<AnalyticsBanner {analyticsId} {analyticsProps} {page} />
+<AnalyticsBanner {analyticsProps} {page} />
 <Header />
 
 <Main>

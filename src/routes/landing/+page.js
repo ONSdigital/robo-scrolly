@@ -1,8 +1,11 @@
 import { asset } from "$app/paths";
-import { getData } from "$lib/utils";
+import { getData, getPlace } from "$lib/utils";
 
 export async function load({ fetch }) {
 	let places = await getData(asset("/data/places.csv"), fetch); // Array of data for all places
 
-	return { places };
+	let place = await getPlace(asset("/data/json/default.json"), fetch);
+	const meta = place.sections.find((s) => s.type === "Meta");
+
+	return { places, meta };
 }

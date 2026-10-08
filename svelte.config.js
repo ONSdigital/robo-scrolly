@@ -20,7 +20,7 @@ const config = {
 			fallback: preview ? "404.html" : undefined
 		}),
 		prerender: {
-			entries: ["/", "/embed/"],
+			entries: ["/", "/landing/"],
 			handleHttpError: "warn",
 			handleMissingId: "warn"
 		},
