@@ -47,6 +47,11 @@
 	// DEMO-SPECIFIC CONFIG
 	// Constants
 	const mapstyle = asset("/data/mapstyle.json");
+	const dateOptions = {
+		day: "numeric",
+		month: "long",
+		year: "numeric"
+	};
 
 	// Element bindings
 	let map = $state({ map1: null, map2: null });
@@ -193,6 +198,9 @@
 	{#if section.type == "Header"}
 		<Hero theme="blue" title={section.title} lede={section.lede}>
 			{@html section.content}
+			{#if section.date}<p>
+					{new Date(section.date).toLocaleDateString("en-GB", dateOptions)}
+				</p>{/if}
 			<Checkbox
 				id="animate-checkbox"
 				label="Enable animation"
@@ -213,11 +221,13 @@
 				/>
 			</div>
 			{#if place}
-				<p class="scroll-cue">Scroll to begin <Icon type="arrow" rotation={90} /></p>
+				<p class="scroll-cue">
+					<Icon type="arrow" rotation={90} size="xl" /> Scroll to begin
+				</p>
 			{/if}
 		</Hero>
 	{:else if section.type == "Filler"}
-		<Highlight id={section.id ? section.id : null} bigText>
+		<Highlight id={section.id ? section.id : null} cls="ons-u-pt-3xl ons-u-pb-3xl" bigText>
 			{@html section.content}
 		</Highlight>
 	{:else if section.type == "Section"}

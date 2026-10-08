@@ -1,5 +1,6 @@
 <script>
 	import "@onsvisual/svelte-components/css/main.css";
+	import "../../app.css";
 	import { page } from "$app/stores";
 	import { AnalyticsBanner, Header, Main, Footer } from "@onsvisual/svelte-components";
 	import { analyticsId, analyticsProps } from "$lib/config";

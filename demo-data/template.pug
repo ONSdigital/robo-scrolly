@@ -1,11 +1,3 @@
-// Version information. YYYY-MM-DD
-
-section#top.Header
-    prop.title Disability and unpaid care in #{place ? place.areanm : 'your area'}
-    prop.lede How many people are limited by a disability or long-term health problem?
-    p DD MMM YYYY
-    prop.label Select a local authority area for a personalised look at health, disability and unpaid care
-
 -// Variables
 -var ew = lookup["K04000001"]
 -var eng = lookup["E92000001"]
@@ -15,6 +7,27 @@ section#top.Header
 -var groupArea = place ? lookup[place.regioncd || place.ctrycd] : null
 -// Words for a change since 2001, eg. "up from 24.4%"
 -var upDown = {texts: ["up from", "the same as", "down from"]}
+
+// Version information. 2021-03-21
+
+-// Metadata for SEO and analytics
+section.Meta
+    prop.title Disability and unpaid care #{place ? place.getName("in") : 'in your area'} - ONS
+    prop.description How many people are limited by a disability or long-term health problem?
+    prop.contentTitle Title for google analytics
+    prop.releaseDate 2021-03-21
+    prop.lastUpdated 2021-03-21
+    prop.outputSeries slugforoutputseries
+    prop.contentType robo-journalism
+
+section#top.Header
+    prop.title Disability and unpaid care #{place ? place.getName("in") : 'in your area'}
+    prop.lede How many people are limited by a disability or long-term health problem?
+    prop.date 2021-03-21
+    if place
+        prop.label Select a local authority area
+    else
+        prop.label Select another local authority area
 
 if place
     section#intro.Filler
