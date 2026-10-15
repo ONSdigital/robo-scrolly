@@ -9,7 +9,6 @@
 		"build:data": "node ./scripts/build-data",
 		"package": "vite package",
 		"preview": "vite preview",
-		"deploy": "gh-pages -d build -t true",
 		"lint": "prettier --ignore-path .gitignore --ignore-path .prettierignore --check .",
 		"format": "prettier --ignore-path .gitignore --ignore-path .prettierignore --write ."
 	},
@@ -28,7 +27,6 @@
 		"cross-env": "^7.0.3",
 		"d3-dsv": "latest",
 		"d3-format": "^3.1.0",
-		"gh-pages": "6.1.1",
 		"node-html-parser": "^6.1.13",
 		"parse-color": "^1.0.0",
 		"prettier": "^3.9.9",
