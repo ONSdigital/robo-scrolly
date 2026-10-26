@@ -3,13 +3,22 @@
 	<head>
 		<meta charset="utf-8" />
 		<meta name="viewport" content="width=device-width,initial-scale=1" />
-		<link href="/robo-scrolly/_app/immutable/entry/start.DF26f88y.js" rel="modulepreload">
-		<link href="/robo-scrolly/_app/immutable/chunks/wAhbcrcU.js" rel="modulepreload">
+		<script>
+			// Force browser to add a trailing slash before the app hydrates
+			(function () {
+				var path = location.pathname;
+				if (!/\/$/.test(path) && !/\.[^/]+$/.test(path)) {
+					location.replace(path + "/" + location.search + location.hash);
+				}
+			})();
+		</script>
+		<link href="/robo-scrolly/_app/immutable/entry/start.DOiX0zJE.js" rel="modulepreload">
+		<link href="/robo-scrolly/_app/immutable/chunks/9aeVgHL2.js" rel="modulepreload">
 		<link href="/robo-scrolly/_app/immutable/chunks/bONvJ7KZ.js" rel="modulepreload">
 		<link href="/robo-scrolly/_app/immutable/chunks/B-LBwlAt.js" rel="modulepreload">
-		<link href="/robo-scrolly/_app/immutable/chunks/09RrxkPb.js" rel="modulepreload">
-		<link href="/robo-scrolly/_app/immutable/chunks/ktxJqexI.js" rel="modulepreload">
-		<link href="/robo-scrolly/_app/immutable/entry/app.B6g7oZbZ.js" rel="modulepreload">
+		<link href="/robo-scrolly/_app/immutable/chunks/DMAA2Jog.js" rel="modulepreload">
+		<link href="/robo-scrolly/_app/immutable/chunks/D1q20rVq.js" rel="modulepreload">
+		<link href="/robo-scrolly/_app/immutable/entry/app.shOYBoxo.js" rel="modulepreload">
 		<link href="/robo-scrolly/_app/immutable/chunks/PPVm8Dsz.js" rel="modulepreload">
 		<link href="/robo-scrolly/_app/immutable/chunks/gJvuo6aP.js" rel="modulepreload">
 		<link href="/robo-scrolly/_app/immutable/chunks/Crn15Kp6.js" rel="modulepreload">
@@ -24,7 +33,7 @@
 		<div id="svelte">
 			<script>
 				{
-					__sveltekit_chloii = {
+					__sveltekit_5udexq = {
 						base: "/robo-scrolly",
 						assets: "/robo-scrolly"
 					};
@@ -32,8 +41,8 @@
 					const element = document.currentScript.parentElement;
 
 					Promise.all([
-						import("/robo-scrolly/_app/immutable/entry/start.DF26f88y.js"),
-						import("/robo-scrolly/_app/immutable/entry/app.B6g7oZbZ.js")
+						import("/robo-scrolly/_app/immutable/entry/start.DOiX0zJE.js"),
+						import("/robo-scrolly/_app/immutable/entry/app.shOYBoxo.js")
 					]).then(([kit, app]) => {
 						kit.start(app, element);
 					});
