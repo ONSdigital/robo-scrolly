@@ -11,6 +11,7 @@ The UI comes from `@onsvisual/svelte-components` (there are no local components;
 ## Commands
 
 ```bash
+npm run check:data      # check the source CSV for blank rows, missing or duplicate codes and mixed types
 npm run build:data      # render demo-data/ (or the source in src/app.config.js) into static/data/
 npm run dev             # dev server at localhost:5173
 npm run build           # production build to build/, then js-fix
@@ -24,6 +25,8 @@ There are no tests. `static/data/json/` and `static/data/places.csv` are generat
 Formatting (`.prettierrc`): tabs (width 4), print width 100, no trailing commas, matching robo-utils.
 
 ## Architecture
+
+**Data check (Node, `scripts/check-data.js`).** Reads the whole CSV named in `src/app.config.js` (ignoring `filter`) and prints its likely code and name columns (from robo-utils' `getCodeKey` and `getNameKey`), then any blank rows, rows with no code, duplicate codes and columns with mixed types (empty cells are valid in any column). It reports every problem, identifying rows by their spreadsheet row number (the header is row 1), and exits with code 1 if there are any. It isn't part of `build:data`.
 
 **Data build (Node, `scripts/build-data.js`).** Reads the CSV and Pug template named in `src/app.config.js`, keeps rows whose code prefix is in `filter` (all rows if it's empty), and for each area (plus `null`, meaning no area selected) calls robo-utils' `renderJSON`. It writes `static/data/json/<areacd>.json` (and `default.json`), plus `static/data/places.csv` with only the `cols` columns, which every page loads for the charts, maps and area list (so any column a chart or map uses must be in `cols`). After a run where every page rendered without a Pug error, it deletes JSON files for areas that are no longer in the data; it prints a summary and exits with code 1 if any page failed. The demo data is from the 2001 and 2011 censuses (disability and unpaid care).
 
