@@ -237,86 +237,96 @@
 		</Section>
 	{:else if section.type == "Scroller"}
 		<Scroller id={section.id} {threshold} splitscreen={true} on:change={runAction}>
-			<div slot="background">
-				{#if section.id == "scatter"}
-					<div class="scroller-background">
-						<div class="chart">
-							<ScatterChart
-								data={places}
-								{animation}
-								color="lightgrey"
-								colorSelect="#206095"
-								colorHighlight="#999"
-								xKey={props[section.id].xKey}
-								yKey={props[section.id].yKey}
-								xSuffix="%"
-								idKey="areacd"
-								labelKey="areanm"
-								selected={place.areacd}
-								highlighted={props[section.id].highlighted}
-								hover
-								labels
-								overlayFill
-								xMin={5}
-								xMax={30}
-								height="calc(100vh - 100px)"
-								padding={{ top: 0, bottom: 20, left: 35, right: 20 }}
-							/>
-						</div>
-					</div>
-				{:else if section.id == "map1" || section.id == "map2"}
-					<div class="scroller-background">
-						<Map
-							style={mapstyle}
-							bind:map={map[section.id]}
-							interactive={false}
-							location={{ bounds: mapbounds }}
-						>
-							<MapSource id="lad" type="geojson" data={geojson} promoteId="AREACD">
-								<MapLayer
-									id="lad-fill"
-									type="fill"
-									idKey="areacd"
-									colorKey={props[section.id].colorKey}
+			<!-- svelte-components 2's Scroller takes snippets, not slots -->
+			{#snippet background()}
+				<div>
+					{#if section.id == "scatter"}
+						<div class="scroller-background">
+							<div class="chart">
+								<ScatterChart
 									data={places}
-									highlight
+									{animation}
+									color="lightgrey"
+									colorSelect="#206095"
+									colorHighlight="#999"
+									xKey={props[section.id].xKey}
+									yKey={props[section.id].yKey}
+									xSuffix="%"
+									idKey="areacd"
+									labelKey="areanm"
+									selected={place.areacd}
 									highlighted={props[section.id].highlighted}
-									paint={{
-										"fill-color": [
-											"case",
-											["!=", ["feature-state", "color"], null],
-											["feature-state", "color"],
-											"rgba(255, 255, 255, 0)"
-										],
-										"fill-opacity": 0.7
-									}}
-									order="place_other"
+									hover
+									labels
+									overlayFill
+									xMin={5}
+									xMax={30}
+									height="calc(100vh - 100px)"
+									padding={{ top: 0, bottom: 20, left: 35, right: 20 }}
 								/>
-								<MapLayer
-									id="lad-line"
-									type="line"
-									paint={{
-										"line-color": [
-											"case",
-											["==", ["feature-state", "highlighted"], true],
-											"black",
-											"rgba(255,255,255,0)"
-										],
-										"line-width": 2
-									}}
-								/>
-							</MapSource>
-						</Map>
-					</div>
-				{/if}
-			</div>
-			<div slot="foreground">
-				{#each section.sections as sub}
-					<ScrollerSection id={sub.id}>
-						{@html sub.content}
-					</ScrollerSection>
-				{/each}
-			</div>
+							</div>
+						</div>
+					{:else if section.id == "map1" || section.id == "map2"}
+						<div class="scroller-background">
+							<Map
+								style={mapstyle}
+								bind:map={map[section.id]}
+								interactive={false}
+								location={{ bounds: mapbounds }}
+							>
+								<MapSource
+									id="lad"
+									type="geojson"
+									data={geojson}
+									promoteId="AREACD"
+								>
+									<MapLayer
+										id="lad-fill"
+										type="fill"
+										idKey="areacd"
+										colorKey={props[section.id].colorKey}
+										data={places}
+										highlight
+										highlighted={props[section.id].highlighted}
+										paint={{
+											"fill-color": [
+												"case",
+												["!=", ["feature-state", "color"], null],
+												["feature-state", "color"],
+												"rgba(255, 255, 255, 0)"
+											],
+											"fill-opacity": 0.7
+										}}
+										order="place_other"
+									/>
+									<MapLayer
+										id="lad-line"
+										type="line"
+										paint={{
+											"line-color": [
+												"case",
+												["==", ["feature-state", "highlighted"], true],
+												"black",
+												"rgba(255,255,255,0)"
+											],
+											"line-width": 2
+										}}
+									/>
+								</MapSource>
+							</Map>
+						</div>
+					{/if}
+				</div>
+			{/snippet}
+			{#snippet foreground()}
+				<div>
+					{#each section.sections as sub}
+						<ScrollerSection id={sub.id}>
+							{@html sub.content}
+						</ScrollerSection>
+					{/each}
+				</div>
+			{/snippet}
 		</Scroller>
 	{/if}
 {/each}
